@@ -39,22 +39,10 @@
                         <div id="chooseTask">
                             <input list="tasks" placeholder="<?= $translations[$language]['dashboard_task_search']?>" name="searchTask" id="searchTask" value="<?php if (isset($_SESSION['tasks']) && (end($_SESSION['tasks']))->getId() != null)  : ?> <?= $nameLastTask ?> <?php endif; ?>" autofocus required>
                             <datalist id="tasks">
-                                <option value="<?= $translations[$language]['dashboard_datalist_cleaning']?>">                               
-                                <option value="<?= $translations[$language]['dashboard_datalist_shopping']?>">
-                                <option value="<?= $translations[$language]['dashboard_datalist_cooking']?>">
-                                <option value="<?= $translations[$language]['dashboard_datalist_dishes']?>">
-                                <option value="<?= $translations[$language]['dashboard_datalist_laundry']?>">          
-                                <option value="<?= $translations[$language]['dashboard_datalist_childrenCare']?>">                      
-                                <option value="<?= $translations[$language]['dashboard_datalist_childsPlay']?>">
-                                <option value="<?= $translations[$language]['dashboard_datalist_childrensJourney']?>">                                
-                                <option value="<?= $translations[$language]['dashboard_datalist_parentJourney']?>">                                
-                                <option value="<?= $translations[$language]['dashboard_datalist_parentCare']?>">
-                                <option value="<?= $translations[$language]['dashboard_datalist_administrative']?>">
-                                <option value="<?= $translations[$language]['dashboard_datalist_petCare']?>">
-                                <option value="<?= $translations[$language]['dashboard_datalist_gardening']?>">                               
-                                <option value="<?= $translations[$language]['dashboard_datalist_diy']?>">
-                                <option value="<?= $translations[$language]['dashboard_datalist_householdManagement']?>">
-                            </datalist> 
+                                <?php foreach ($tasks as $task): ?>
+                                <option value="<?= $translations[$language][$task['id']] ?? $task['activity'] ?>">
+                                    <?php endforeach; ?>
+                            </datalist>
                         </div>
                     </div>
 

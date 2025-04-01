@@ -73,7 +73,7 @@ class DashBoardController {
      * @throws Exception
      */
 
-    public function infoDashBoard($message = null): void
+    public function InfoDashBoard($message = null): void
     {
         // Check if the user is connected
         if (!isset($_SESSION['IdLogin'])) {
@@ -87,8 +87,7 @@ class DashBoardController {
             // // Retrieve the DashBoard
             
             $this->UpdateDashBoard();
-            
-            
+
             // Retrieve the Tasks
             $tasks = $this->TaskManager->GetAllByDashBoard($this->DashBoard->GetId());
             // Send to the session the list of Tasks

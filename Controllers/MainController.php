@@ -57,6 +57,9 @@ class MainController {
      */
     public function DashBoard($message = null, $idLastTask = null, $nameLastTask = null, $durationLastTask = null, $dateLastTask = null) {
         $taskData = $this->calculateTaskDataD();
+        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/tasks.json');
+        $tasksData = json_decode($tasksJson, true);
+
         $additionalData = [
             "message" => $message,
             "idLastTask" => $idLastTask,
@@ -66,7 +69,8 @@ class MainController {
             "dateLastTask" => $dateLastTask,
             "labels" => $taskData["labels"],
             "data1" => $taskData["data1"],
-            "data2" => $taskData["data2"]
+            "data2" => $taskData["data2"],
+            "tasks" => $tasksData['tasks']
         ];
         $this->displayView("DashBoard", $additionalData);
     }
@@ -74,7 +78,8 @@ class MainController {
     /**
      * Displays the reference page.
      */
-    public function Reference() {
+    public function Reference(): void
+    {
         $tasksJson = file_get_contents(__DIR__ . '/../Public/data/tasks.json');
         $tasksData = json_decode($tasksJson, true);
 
@@ -83,33 +88,28 @@ class MainController {
         ]);
     }
 
-    /**
-     * Displays the Follow up page
-     * @author Enzo
-     * @param string|null $message
-     */
-    public function FollowUp($message = null) {
-        $taskData = $this->calculateTaskDataD(true);
-        $additionalData = array_merge($taskData, ["message" => $message]);
-        $this->displayView("FollowUp", $additionalData);
-    }
+
 
     /**
      * Displays various policy and legal pages.
      */
-    public function CookiePolicy() {
+    public function CookiePolicy(): void
+    {
         $this->displayView("CookiePolicy");
     }
 
-    public function LegalNotice() {
+    public function LegalNotice(): void
+    {
         $this->displayView("LegalNotice");
     }
 
-    public function PrivacyPolicy() {
+    public function PrivacyPolicy(): void
+    {
         $this->displayView("PrivacyPolicy");
     }
 
-    public function TermsConditions() {
+    public function TermsConditions(): void
+    {
         $this->displayView("TermsConditions");
     }
 
@@ -131,6 +131,119 @@ class MainController {
         $this->displayView("ExportPDF", ["message" => $message]);
     }
 
+
+
+    /**
+     * Initializes common view data
+     * @return array
+     */
+    private function initializeViewData() : array {
+        $response = $this->getResponse();
+        return [
+            "prop" => $response[1],
+            "imagePath" => $response[2]
+        ];
+    }
+
+
+    /**
+     * Displays the Follow up page
+     * @author Enzo
+     * @param string|null $message
+     */
+    public function FollowUp($message = null): void
+    {
+        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/tasks.json');
+        $tasksData = json_decode($tasksJson, true);
+
+        $taskData = $this->calculateTaskDataD(true);
+        $additionalData = array_merge($taskData, [
+            "message" => $message,
+            "tasks" => $tasksData['tasks']
+        ]);
+
+        $this->displayView("FollowUp", $additionalData);
+    }
+
+    /**
+     * Updates follow-up specific data
+     * @param array &$data
+     * @param object $task
+     */
+    private function updateFollowUpData(&$data, $task) {
+        $taskName = $task->getNameTask();
+        $taskDate = $task->getDateAdded();
+        $year = date('Y', strtotime($taskDate));
+        $month = date('n', strtotime($taskDate));
+
+        if (!isset($data["taskCountPerYear"][$year][$taskName])) {
+            $data["taskCountPerYear"][$year][$taskName] = 1;
+        } else {
+            $data["taskCountPerYear"][$year][$taskName]++;
+        }
+
+        if (!isset($data["taskCountPerYearMonth"][$year][$month][$taskName])) {
+            $data["taskCountPerYearMonth"][$year][$month][$taskName] = 1;
+        } else {
+            $data["taskCountPerYearMonth"][$year][$month][$taskName]++;
+        }
+    }
+    /**
+     * Calculates the task data for the dashboard and follow-up.
+     * @param bool $isFollowUp
+     * @return array
+     */
+    private function calculateTaskDataD(bool $isFollowUp = false): array
+    {
+        $data = [
+            "labels" => [],
+            "data1" => [],
+            "data2" => [],
+            "taskDurations" => [],
+            "taskCounts" => [],
+            "taskPercent" => [],
+            "hoursHomeGlobalPerTask" => [],
+            "taskCountPerYearMonth" => [],
+            "taskCountPerYear" => []
+        ];
+
+        if (!isset($_SESSION['tasks'])) {
+            return $data;
+        }
+
+        $totalDuration = 0;
+        foreach ($_SESSION['tasks'] as $task) {
+            $taskName = $task->getNameTask();
+            $taskDuration = $task->getDuration();
+            $totalDuration += $taskDuration;
+
+            if (!in_array($taskName, $data["labels"])) {
+                $data["labels"][] = $taskName;
+                $data["taskDurations"][$taskName] = $taskDuration;
+                $data["taskCounts"][$taskName] = 1;
+            } else {
+                $data["taskDurations"][$taskName] += $taskDuration;
+                $data["taskCounts"][$taskName]++;
+            }
+
+            if ($isFollowUp) {
+                $this->updateFollowUpData($data, $task);
+            }
+        }
+
+        foreach ($data["labels"] as $label) {
+            $data["data1"][] = $data["taskDurations"][$label];
+            $data["data2"][] = $data["taskDurations"][$label] / $data["taskCounts"][$label];
+
+            if ($isFollowUp) {
+                $data["taskPercent"][$label] = ceil(($data["taskDurations"][$label] * 100) / $totalDuration);
+                $data["hoursHomeGlobalPerTask"][$label] = round($data["taskDurations"][$label] / 4);
+            }
+        }
+
+        return $data;
+    }
+
     /**
      * Displays the response of the companion
      * @author Theo Cornu
@@ -140,9 +253,9 @@ class MainController {
     private function getResponse() : array{
         $durationC = 0;
         $imagePath = "Public/image/companion/companion1.png";
-        $prop = ""; 
+        $prop = "";
         $affiche = array();
-    
+
         if (isset($_SESSION['IdLogin'])) {
             switch ($_GET['action']) {
                 case 'Index':
@@ -231,100 +344,9 @@ class MainController {
                     break;
             }
         }
-    
+
         $affiche[1] = $prop;
         $affiche[2] = $imagePath;
         return $affiche;
-    }
-
-    /**
-     * Initializes common view data
-     * @return array
-     */
-    private function initializeViewData() : array {
-        $response = $this->getResponse();
-        return [
-            "prop" => $response[1],
-            "imagePath" => $response[2]
-        ];
-    }
-
-    /**
-     * Updates follow-up specific data
-     * @param array &$data
-     * @param object $task
-     */
-    private function updateFollowUpData(&$data, $task) {
-        $taskName = $task->getNameTask();
-        $taskDate = $task->getDateAdded();
-        $year = date('Y', strtotime($taskDate));
-        $month = date('n', strtotime($taskDate));
-
-        if (!isset($data["taskCountPerYear"][$year][$taskName])) {
-            $data["taskCountPerYear"][$year][$taskName] = 1;
-        } else {
-            $data["taskCountPerYear"][$year][$taskName]++;
-        }
-
-        if (!isset($data["taskCountPerYearMonth"][$year][$month][$taskName])) {
-            $data["taskCountPerYearMonth"][$year][$month][$taskName] = 1;
-        } else {
-            $data["taskCountPerYearMonth"][$year][$month][$taskName]++;
-        }
-    }
-    /**
-     * Calculates the task data for the dashboard and follow-up.
-     * @param bool $isFollowUp
-     * @return array
-     */
-    private function calculateTaskDataD(bool $isFollowUp = false): array
-    {
-        $data = [
-            "labels" => [],
-            "data1" => [],
-            "data2" => [],
-            "taskDurations" => [],
-            "taskCounts" => [],
-            "taskPercent" => [],
-            "hoursHomeGlobalPerTask" => [],
-            "taskCountPerYearMonth" => [],
-            "taskCountPerYear" => []
-        ];
-
-        if (!isset($_SESSION['tasks'])) {
-            return $data;
-        }
-
-        $totalDuration = 0;
-        foreach ($_SESSION['tasks'] as $task) {
-            $taskName = $task->getNameTask();
-            $taskDuration = $task->getDuration();
-            $totalDuration += $taskDuration;
-
-            if (!in_array($taskName, $data["labels"])) {
-                $data["labels"][] = $taskName;
-                $data["taskDurations"][$taskName] = $taskDuration;
-                $data["taskCounts"][$taskName] = 1;
-            } else {
-                $data["taskDurations"][$taskName] += $taskDuration;
-                $data["taskCounts"][$taskName]++;
-            }
-
-            if ($isFollowUp) {
-                $this->updateFollowUpData($data, $task);
-            }
-        }
-
-        foreach ($data["labels"] as $label) {
-            $data["data1"][] = $data["taskDurations"][$label];
-            $data["data2"][] = $data["taskDurations"][$label] / $data["taskCounts"][$label];
-
-            if ($isFollowUp) {
-                $data["taskPercent"][$label] = ceil(($data["taskDurations"][$label] * 100) / $totalDuration);
-                $data["hoursHomeGlobalPerTask"][$label] = round($data["taskDurations"][$label] / 4);
-            }
-        }
-
-        return $data;
     }
 }
