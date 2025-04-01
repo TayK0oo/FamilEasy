@@ -207,8 +207,11 @@ class MainController {
                 case 'InfoFollowUp':
                     $prop = "You are on the Follow Up page. Here, you can access information about task tracking.";
                     break;
+                case 'AddUser&':
+                    $prop = "You've just created a new account. Welcome to Family'Easy!";
+                    break;
                 default:
-                    $prop = 'Action non reconnue';
+                    $prop = 'Ouaf ouaf';
                     break;
             }
         } else {
@@ -224,7 +227,7 @@ class MainController {
                     $prop = "You're on the Registration page. Create your account here to get started.";
                     break;
                 default:
-                    $prop = 'Action non reconnue';
+                    $prop = 'Ouaf ouaf';
                     break;
             }
         }

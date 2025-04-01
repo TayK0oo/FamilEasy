@@ -107,7 +107,7 @@ class UserController{
         
         $this->populateUser();
         // Add the new User
-        $this->UserManager->addUser($this->User );
+        $this->UserManager->AddUser($this->User );
         
         // header('Location: index.php?action=Index');
         // Connect the user

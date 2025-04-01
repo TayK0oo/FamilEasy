@@ -237,7 +237,7 @@ class UserManager extends Model
     public function AddUser(User $User): void
     {
         try {
-            
+
 
             // Add a login associated with the User
             $loginManager = new LoginManager();
@@ -258,7 +258,6 @@ class UserManager extends Model
             $result = $this->executerRequete($sql);
             $line = $result->fetch();
             $dashBoard->setId($line['idDashBoard']);
-
             $sql = ("INSERT INTO users (LastName, FirstName, gender, BirthDate, email, FamilyPlace, LoginidLogin, DashBoardidDashBoard) 
             VALUES (:value1, :value2, :value3, :value4, :value5, :value6, (SELECT idLogin from login where idLogin = :value7), (SELECT idDashBoard from dashboard where idDashBoard = :value8))");
 
@@ -353,7 +352,7 @@ class UserManager extends Model
     public function UpdateUserHome(int $idUser, int $idMyHome): void
     {
         try {
-            $sql = 'UPDATE users SET MyHomeidMyHome = ? WHERE idUsers = ?';
+            $sql = 'UPDATE users SET MyHomeIdMyHome = ? WHERE idUsers = ?';
             $this->executerRequete($sql, [$idMyHome, $idUser]);
         } catch (PDOException $e) {
             // In case of an error, redirect to the error page with a message
@@ -372,10 +371,10 @@ class UserManager extends Model
     public function GetIdMyHomeByIdUser(int $idUser): ?int
     {
         try {
-            $sql = 'SELECT MyHomeidMyHome FROM users WHERE idUsers = ?';
+            $sql = 'SELECT MyHomeIdMyHome FROM users WHERE idUsers = ?';
             $result = $this->executerRequete($sql, [$idUser]);
             $line = $result->fetch(PDO::FETCH_ASSOC);
-            return $line['MyHomeidMyHome'];
+            return $line['MyHomeIdMyHome'];
         } catch (PDOException $e) {
             // In case of an error, redirect to the error page with a message
             $errorMessage = "An error occurred retrieving the MyHome.";
