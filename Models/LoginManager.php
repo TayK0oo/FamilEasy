@@ -29,7 +29,7 @@ class LoginManager extends Model
             $login = [
                 'idLogin' => $ligne['id'],
                 'username' => $ligne['username'],
-                'Hash' => $ligne['Hash']
+                'hash' => $ligne['hash']
             ];
 
             $logins[] = $login;
@@ -72,7 +72,7 @@ class LoginManager extends Model
             $login = new Login(
                 $ligne['id'],
                 $ligne['username'],
-                $ligne['Hash']
+                $ligne['hash']
             );
 
             return $login;
@@ -99,7 +99,7 @@ class LoginManager extends Model
      * @param string $password
      */
     public function UpdateById(int $id, string $username, string $password) : void {
-        $sql = 'UPDATE login SET username = ?, Hash = ? WHERE idLogin = ?';
+        $sql = 'UPDATE login SET username = ?, hash = ? WHERE idLogin = ?';
         $this->executerRequete($sql,[$username, $password, $id]);
     }
 
@@ -110,7 +110,7 @@ class LoginManager extends Model
      * @return Login
      */
     public function Add(string $username, string $password) : Login{
-        $sql = 'INSERT INTO login (username, Hash) VALUES (?, ?)';
+        $sql = 'INSERT INTO login (username, hash) VALUES (?, ?)';
         $login = new Login($username, $password);
         $this->executerRequete($sql, [$username, $login->getHash()]);
         return $login;

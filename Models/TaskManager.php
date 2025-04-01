@@ -42,7 +42,7 @@ class TaskManager extends Model
             while ($line = $result->fetch(PDO::FETCH_ASSOC)) {
                 $Task = new Task(
                     $line['idTask'],
-                    $line['Name'],
+                    $line['name'],
                     $line['Duration'],
                     $line['Date'],
                     $line['DashBoardidDashBoard'],
@@ -75,7 +75,7 @@ class TaskManager extends Model
             $line = $result->fetch(PDO::FETCH_ASSOC);
             $Task = new Task(
                 $line['idTask'],
-                $line['Name'],
+                $line['name'],
                 $line['Duration'],
                 $line['Date'],
                 $line['DashBoardidDashboard'],
@@ -100,7 +100,7 @@ class TaskManager extends Model
     public function AddTask(Task $Task): Task
     {
         try {
-            $sql = 'INSERT INTO task (Name, Duration, Date, DashBoardidDashboard) VALUES (:value1, :value2, :value3, :value4)';
+            $sql = 'INSERT INTO task (name, Duration, Date, DashBoardidDashboard) VALUES (:value1, :value2, :value3, :value4)';
             $this->executerRequete($sql, [
                 ':value1' => $Task->getNameTask(),
                 ':value2' => $Task->getDuration(),
@@ -127,7 +127,7 @@ class TaskManager extends Model
     public function UpdateTask(Task $Task): Task
     {
         try {
-            $sql = 'UPDATE task SET Name = :value1, Duration = :value2, Date = :value3 WHERE idTask = :value5';
+            $sql = 'UPDATE task SET name = :value1, Duration = :value2, Date = :value3 WHERE idTask = :value5';
             $this->executerRequete($sql, [
                 ':value1' => $Task->getNameTask(),
                 ':value2' => $Task->getDuration(),
@@ -173,7 +173,7 @@ class TaskManager extends Model
     {
         try {
             if ($Task->getDuration() != null) {
-                $sql = 'SELECT COUNT(*) FROM task WHERE Name = ? AND Date = ? AND Duration = ? AND idTask != ?';
+                $sql = 'SELECT COUNT(*) FROM task WHERE name = ? AND Date = ? AND Duration = ? AND idTask != ?';
                 $result = $this->executerRequete($sql, [$Task->getNameTask(), $Task->getDateAdded(), $Task->getDuration(), $Task->getId()]);
                 $line = $result->fetch(PDO::FETCH_NUM);
                 return $line[0] > 0;

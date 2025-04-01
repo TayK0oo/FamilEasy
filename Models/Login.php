@@ -12,7 +12,7 @@
         private string $_login;
         private string $_hash;
 
-        public function __construct(string $login ='', string $password='')
+        public function __construct( $id ='',string $login ='', string $password='')
         {
             
             $this->_login = $login;

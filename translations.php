@@ -126,7 +126,7 @@
             'registration_gender_label' => 'Gender',
             'registration_gender_woman' => 'Woman',
             'registration_gender_man' => 'Man',
-            'registation_gender_other' => 'Other',
+            'registration_gender_other' => 'Other',
             'registration_placeFamily_desc'=> 'What\'s your place in your family ?',
             'registration_placeFamily_option' => 'Select your place',
             'registration_placeFamily_parent' => 'Parent',

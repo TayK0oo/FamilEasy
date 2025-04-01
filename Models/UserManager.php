@@ -36,7 +36,7 @@ class UserManager extends Model
                     $line['lastName'],
                     $line['email'],
                     $line['gender'],
-                    $line['familyPlace'],
+                    $line['FamilyPlace'],
                     $line['birthDate']
                 );
 
@@ -166,13 +166,13 @@ class UserManager extends Model
             $sql = 'SELECT * FROM users WHERE LoginidLogin = ?';
             $result = $this->executerRequete($sql, [$id]);
             $line = $result->fetch();
-            if ($line !== false) { //(LastName, FirstName, Gender, BirthDate, Email, FamilyPlace, LoginidLogin, DashBoardidDashBoard)
+            if ($line !== false) { //(LastName, FirstName, gender, BirthDate, email, FamilyPlace, LoginidLogin, DashBoardidDashBoard)
                 $User = new User(
                     $line['LastName'],
                     $line['FirstName'],
-                    $line['Gender'],
+                    $line['gender'],
                     $line['BirthDate'],
-                    $line['Email'],
+                    $line['email'],
                     $line['FamilyPlace']
                 );
 
@@ -259,7 +259,7 @@ class UserManager extends Model
             $line = $result->fetch();
             $dashBoard->setId($line['idDashBoard']);
 
-            $sql = ("INSERT INTO users (LastName, FirstName, Gender, BirthDate, Email, FamilyPlace, LoginidLogin, DashBoardidDashBoard) 
+            $sql = ("INSERT INTO users (LastName, FirstName, gender, BirthDate, email, FamilyPlace, LoginidLogin, DashBoardidDashBoard) 
             VALUES (:value1, :value2, :value3, :value4, :value5, :value6, (SELECT idLogin from login where idLogin = :value7), (SELECT idDashBoard from dashboard where idDashBoard = :value8))");
 
             $value1 = $User->getLastName();
@@ -304,7 +304,7 @@ class UserManager extends Model
     public function UpdateUser(User $User): void
     {
         try {
-            $sql = 'UPDATE users SET FirstName = ?, LastName = ?, Email = ?, Gender = ?, FamilyPlace = ?, BirthDate = ? WHERE idUsers = ?';
+            $sql = 'UPDATE users SET FirstName = ?, LastName = ?, email = ?, gender = ?, FamilyPlace = ?, BirthDate = ? WHERE idUsers = ?';
             $this->executerRequete($sql, [
                 $User->getFirstName(),
                 $User->getLastName(),
