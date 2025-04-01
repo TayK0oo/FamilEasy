@@ -9,8 +9,8 @@
     class Login
     {
         private $_id;
-        private $_login;
-        private $_hash;
+        private string $_login;
+        private string $_hash;
 
         public function __construct(string $login ='', string $password='')
         {

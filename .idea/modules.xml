@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/MigrationGood/MigrationGood.iml" filepath="$PROJECT_DIR$/MigrationGood/MigrationGood.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/eGeekMaster.iml" filepath="$PROJECT_DIR$/.idea/eGeekMaster.iml" />
     </modules>
   </component>

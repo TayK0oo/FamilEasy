@@ -1,0 +1,154 @@
+{
+  "tasks": [
+    {
+      "id": "cleaning",
+      "activity": "Nettoyage",
+      "description": "Nettoyer les surfaces, passer l'aspirateur, faire la poussière, etc.",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_cleaning.png"
+    },
+    {
+      "id": "shopping",
+      "activity": "Courses",
+      "description": "Faire les courses alimentaires et autres nécessités",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_shopping.png"
+    },
+    {
+      "id": "cooking",
+      "activity": "Cuisine",
+      "description": "Préparer les repas pour la famille",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_cooking.png"
+    },
+    {
+      "id": "dishes",
+      "activity": "Vaisselle",
+      "description": "Laver la vaisselle ou charger/décharger le lave-vaisselle",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "30 minutes",
+      "example2": "7,50€",
+      "image": "img_dishes.png"
+    },
+    {
+      "id": "laundry",
+      "activity": "Lessive",
+      "description": "Laver, sécher et plier le linge",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_laundry.png"
+    },
+    {
+      "id": "childrenCare",
+      "activity": "Soins aux enfants",
+      "description": "S'occuper des enfants, les habiller, les nourrir, etc.",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "2 heures",
+      "example2": "30€",
+      "image": "img_childrenCare.png"
+    },
+    {
+      "id": "childsPlay",
+      "activity": "Jeux avec les enfants",
+      "description": "Jouer et interagir avec les enfants",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_childsPlay.png"
+    },
+    {
+      "id": "childrensJourney",
+      "activity": "Trajets des enfants",
+      "description": "Accompagner les enfants à l'école, aux activités, etc.",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "30 minutes",
+      "example2": "7,50€",
+      "image": "img_childrensJourney.png"
+    },
+    {
+      "id": "parentJourney",
+      "activity": "Trajets des parents",
+      "description": "Déplacements liés aux courses, rendez-vous, etc.",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "45 minutes",
+      "example2": "11,25€",
+      "image": "img_parentJourney.png"
+    },
+    {
+      "id": "parentCare",
+      "activity": "Soins aux parents",
+      "description": "S'occuper des parents âgés ou dépendants",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure 15 minutes",
+      "example2": "18,75€",
+      "image": "img_parentCare.png"
+    },
+    {
+      "id": "administrative",
+      "activity": "Administratif",
+      "description": "Gérer les papiers, factures, courriers, etc.",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_administrative.png"
+    },
+    {
+      "id": "petCare",
+      "activity": "Soins aux animaux",
+      "description": "Nourrir, promener et s'occuper des animaux de compagnie",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_petCare.png"
+    },
+    {
+      "id": "gardening",
+      "activity": "Jardinage",
+      "description": "Entretenir le jardin, les plantes, etc.",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure 30 minutes",
+      "example2": "22,50€",
+      "image": "img_gardening.png"
+    },
+    {
+      "id": "diy",
+      "activity": "Bricolage",
+      "description": "Effectuer des réparations et améliorations dans la maison",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_diy.png"
+    },
+    {
+      "id": "householdManagement",
+      "activity": "Gestion du foyer",
+      "description": "Planifier et organiser les tâches ménagères",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "30 minutes",
+      "example2": "7,50€",
+      "image": "img_householdManagement.png"
+    }
+  ]
+}

@@ -75,7 +75,12 @@ class MainController {
      * Displays the reference page.
      */
     public function Reference() {
-        $this->displayView("Reference");
+        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/tasks.json');
+        $tasksData = json_decode($tasksJson, true);
+
+        $this->displayView("Reference", [
+            'tasks' => $tasksData['tasks']
+        ]);
     }
 
     /**

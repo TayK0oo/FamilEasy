@@ -131,11 +131,11 @@ class LoginManager extends Model
             if ($ligne !== false) {
                 $login = new Login(
                     $ligne['username'],
-                    $ligne['Hash']
+                    $ligne['hash']
                     
                 );
                 $login->setId($ligne['idLogin']);
-                $login->setHash($ligne['Hash']);
+                $login->setHash($ligne['hash']);
                 $logintocompare = new Login();
                 $logintocompare->setPassword($password);
                 if($login->getPassword() == $logintocompare->getPassword()) {
