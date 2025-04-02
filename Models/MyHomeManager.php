@@ -200,7 +200,46 @@
 
         }
 
-        
+        /**
+         * Get MyHome ID by User ID
+         * @author [Your Name]
+         * @param int $userId
+         * @return int|null
+         */
+        public function getMyHomeIdByUserId(int $userId): ?int {
+            try {
+                $sql = "SELECT MyHomeIdMyHome FROM users WHERE idUsers = ?";
+                $result = $this->executerRequete($sql, [$userId]);
+                $myHomeId = $result->fetch(PDO::FETCH_ASSOC);
+                return $myHomeId ? (int)$myHomeId['MyHomeIdMyHome'] : null;
+            } catch (Exception $e) {
+                $errorMessage = "An error occurred while getting the MyHome ID for the user";
+                header("Location: index.php?action=MyHome&errorMessage=" . urlencode($errorMessage));
+                exit();
+            }
+        }
 
+        /**
+         * Get total duration of tasks by task name for a MyHome
+         * @author [Your Name]
+         * @param int $myHomeId
+         * @return array
+         */
+        public function getTotalDurationByTask(int $myHomeId): array {
+            try {
+                $sql = "SELECT t.name_task, SUM(t.Duration) as total_duration 
+                        FROM task t 
+                        JOIN dashboard d ON t.DashBoardidDashBoard = d.idDashBoard 
+                        JOIN users u ON d.UseridUser = u.idUsers 
+                        WHERE u.MyHomeIdMyHome = ?
+                        GROUP BY t.name_task";
+                $result = $this->executerRequete($sql, [$myHomeId]);
+                return $result->fetchAll(PDO::FETCH_KEY_PAIR);
+            } catch (Exception $e) {
+                $errorMessage = "An error occurred while getting total duration by task";
+                header("Location: index.php?action=MyHome&errorMessage=" . urlencode($errorMessage));
+                exit();
+            }
+        }
     }
 ?>

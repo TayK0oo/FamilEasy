@@ -1,33 +1,30 @@
 <?php
 
 /**
- * class Task
- * @author Nicolas
- * @author Théo Cornu
+ * Class Task
  */
-
- Class Task
- {
-    private $id;
-    private $nameTask;
-    private $duration;
-    private $dateAdded;
-    private $idDashBoard;
+class Task
+{
+    private ?int $id;
+    private string $nameTask;
+    private ?int $duration;
+    private ?string $dateAdded;
+    private ?int $idDashBoard;
 
     /**
      * Constructor of Task
      */
-    public function __construct(?int $id = null, string $nameTask = "" , ?int $duration = null, ?string $dateAdded = "", ?int $idDashBoard = null)
+    public function __construct(?int $id = null, string $nameTask = "", ?int $duration = null, ?string $dateAdded = null, ?int $idDashBoard = null)
     {
         $this->id = $id;
-        $this->nameTask = $nameTask;
-        $this->duration = $duration;
-        $this->dateAdded = $dateAdded;
-        $this->idDashBoard = $idDashBoard;
+        $this->nameTask = trim($nameTask); // Ensure no leading/trailing spaces.
+        $this->duration = is_numeric($duration) ? (int)$duration : null; // Ensure valid integer.
+        $this->dateAdded = !empty($dateAdded) ? trim($dateAdded) : null; // Ensure valid date or null.
+        $this->idDashBoard = is_numeric($idDashBoard) ? (int)$idDashBoard : null; // Ensure valid integer.
     }
 
     /**
-     * Get the value of id
+     * Get the value of id.
      */
     public function getId(): ?int
     {
@@ -35,19 +32,7 @@
     }
 
     /**
-     * Set the value of id
-     *
-     * @return  self
-     */
-    public function setId(?int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of nameTask
+     * Get the value of nameTask.
      */
     public function getNameTask(): string
     {
@@ -55,74 +40,41 @@
     }
 
     /**
-     * Set the value of nameTask
-     *
-     * @return  self
+     * Get the value of duration.
      */
-    public function setNameTask(string $nameTask): self
+    public function getDuration(): ?int
     {
-        $this->nameTask = $nameTask;
-
-        return $this;
+        return $this->duration; // Allow nullable duration.
     }
 
     /**
-     * Get the value of duration
+     * Get the value of dateAdded.
      */
-    public function getDuration(): int
+    public function getDateAdded(): ?string
     {
-        return $this->duration;
+        return !empty($this->dateAdded) ? date('Y-m-d', strtotime($this->dateAdded)) : null; // Format date if not null.
     }
 
     /**
-     * Set the value of duration
-     *
-     * @return  self
+     * Get the value of idDashBoard.
      */
-    public function setDuration(int $duration): self
-    {
-        $this->duration = $duration;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of dateAdded
-     */
-    public function getDateAdded(): string
-    {
-        return $this->dateAdded;
-    }
-
-    /**
-     * Set the value of dateAdded
-     *
-     * @return  self
-     */
-    public function setDateAdded(string $dateAdded): self
-    {
-        $this->dateAdded = $dateAdded;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of idDashBoard
-     */
-    public function getIdDashBoard(): int
+    public function getIdDashBoard(): ?int
     {
         return $this->idDashBoard;
     }
 
     /**
-     * Set the value of idDashBoard
-     *
-     * @return  self
+     * String representation of Task for debugging purposes.
      */
-    public function setIdDashBoard(int $idDashBoard): self
+    public function __toString(): string
     {
-        $this->idDashBoard = $idDashBoard;
-
-        return $this;
+        return sprintf(
+            "ID: %d | Name: %s | Duration: %d | Date: %s | DashboardID: %d",
+            $this->id ?? 0,
+            empty($this->nameTask) ? "N/A" : htmlspecialchars($this->nameTask),
+            empty($this->duration) ? 0 : htmlspecialchars((string)$this->duration),
+            empty($this->dateAdded) ? "N/A" : htmlspecialchars((string)$this->dateAdded),
+            empty($this->idDashBoard) ? 0 : htmlspecialchars((string)$this->idDashBoard)
+        );
     }
- }
+}

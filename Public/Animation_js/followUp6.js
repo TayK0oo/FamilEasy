@@ -1,59 +1,24 @@
 
 
 
+/**
+ * @author Lola Cohidon
+ * @author Théo Cornu
+*/
 function showDetailed() {
     hideGlobal();
 
     var contentDiv;
     if (document.getElementById("content") == null) {
         var contentDiv = viewFollowUp.appendChild(document.createElement("div"));
-
-        // Add id to contentDiv
         contentDiv.id = "content";
         contentDiv.innerHTML = "";
 
-        // Extract task percentages and global hours from the server
+        const tasksData = JSON.parse(document.getElementById('tasksData').value);
         const taskPercentages = JSON.parse(document.getElementById('data3').value);
-        const globalHours = JSON.parse(document.getElementById('data4').value);
+        const globalPercentages = JSON.parse(document.getElementById('data4').value);
 
-        // Recreate what was in the PHP Session
-        const taskLabels = Object.keys(taskPercentages);
-        const boutonDetails = taskLabels.map(taskName => {
-            let imageName;
-
-            // Mapping task names to corresponding image names
-            switch (taskName) {
-                case "Cleaning": imageName = "img_cleaning2.png"; break;
-                case "Shopping": imageName = "img_shopping2.png"; break;
-                case "Cooking": imageName = "img_cooking2.png"; break;
-                case "Dishes": imageName = "img_dishes2.png"; break;
-                case "Laundry": imageName = "img_laundry2.png"; break;
-                case "Children's Care": imageName = "img_childrenCare2.png"; break;
-                case "Child's Play": imageName = "img_childsPlay2.png"; break;
-                case "Children's Journey": imageName = "img_childrensJourney2.png"; break;
-                case "Parent Care": imageName = "img_parentCare2.png"; break;
-                case "Administrative": imageName = "img_administrative2.png"; break;
-                case "Pet Care": imageName = "img_petCare2.png"; break;
-                case "Gardening": imageName = "img_gardening2.png"; break;
-                case "DIY": imageName = "img_diy2.png"; break;
-                case "Household": imageName = "img_householdManagement2.png"; break;
-
-                default: imageName = "img_default.png";  // Or handle as appropriate
-            }
-
-            return {
-                id: "follow" + taskName.replace(/\s+/g, ''),
-                nom: taskName,
-                image: "Public/image/page_followUp/" + imageName
-            };
-        });
-
-        /**
-         * @author Théo Cornu
-         */
-
-        // Create a flip card for each task
-        boutonDetails.forEach(function (bouton) {
+        tasksData.forEach(function (task) {
             var flipCard = document.createElement("div");
             flipCard.className = "flip-card";
 
@@ -61,69 +26,57 @@ function showDetailed() {
             flipCardInner.className = "flip-card-inner";
 
             // Front of the card
-
             var flipCardFront = document.createElement("div");
             flipCardFront.className = "flip-card-front";
 
-            // Title of the card
             var heading = document.createElement("p");
             heading.className = "heading_8264";
             heading.innerText = "Task";
             flipCardFront.appendChild(heading);
 
-            // Image of the task
             var imageFront = document.createElement("img");
-            imageFront.src = bouton.image;
-            imageFront.alt = bouton.nom;
+            imageFront.src = "Public/image/page_reference/" + task.image;
+            imageFront.alt = task.activity;
             imageFront.className = "image";
             flipCardFront.appendChild(imageFront);
 
-            // Name of the task
             var nameTask = document.createElement("p");
             nameTask.className = "nameTask";
-            nameTask.innerText = bouton.nom;
+            nameTask.innerText = task.activity;
             flipCardFront.appendChild(nameTask);
 
-            // Back of the card
             flipCardInner.appendChild(flipCardFront);
 
+            // Back of the card
             var flipCardBack = document.createElement("div");
             flipCardBack.className = "flip-card-back";
 
-            // Percentage of the task
-            var taskPercentage = taskPercentages[bouton.nom] || 0; // Get the percentage for the task, or 0 if it doesn't exist
-
+            var taskPercentage = taskPercentages[task.activity] || 0;
             var data = document.createElement("div");
             data.className = "data";
             flipCardBack.appendChild(data);
             var pourcent = document.createElement("p");
             pourcent.className = "pourcent";
-            pourcent.innerText = "Contribution : " + taskPercentage + "%"; // Display the task percentage
+            pourcent.innerText = "Contribution : " + taskPercentage + "%";
             data.appendChild(pourcent);
 
-            // Global percentage of the task for the home
-            var globalPercentage = globalHours[bouton.nom] || 0; // Get the percentage for the task, or 0 if it doesn't exist
-
+            var globalPercentage = globalPercentages[task.activity] || 0;
             var pourcent2 = document.createElement("p");
             pourcent2.className = "HourGlobal";
-            pourcent2.innerText = "Global " + globalPercentage + "h"; // Display the task hour
+            pourcent2.innerText = "Global " + decimalToHoursMinutes(globalPercentage);
             flipCardBack.appendChild(pourcent2);
 
-            // Image of the task
             var imageBack = document.createElement("img");
-            imageBack.src = bouton.image;
-            imageBack.alt = bouton.nom;
+            imageBack.src = "Public/image/page_reference/" + task.image;
+            imageBack.alt = task.activity;
             imageBack.className = "image";
             flipCardBack.appendChild(imageBack);
 
             flipCardInner.appendChild(flipCardBack);
-
             flipCard.appendChild(flipCardInner);
-
             contentDiv.appendChild(flipCard);
         });
 
-        // Change button color
         var suiviDButton = document.getElementById("suiviD");
         var suiviGButton = document.getElementById("suiviG");
         suiviDButton.style.backgroundColor = "#b3938e";
@@ -131,6 +84,22 @@ function showDetailed() {
     }
 }
 
+
+// Fonction pour convertir les heures décimales en format "Xh Ymin"
+function decimalToHoursMinutes(decimalHours) {
+    const hours = Math.floor(decimalHours);
+    const minutes = Math.round((decimalHours - hours) * 60);
+
+    // Gestion du cas où les minutes arrondies dépassent 59
+    if (minutes >= 60) {
+        return `${hours + 1}h`;
+    }
+    if (minutes === 0) {
+        return `${hours}h`;
+    }
+
+    return `${hours}h ${minutes.toString().padStart(2, '0')}min`;
+}
 
 
 /**

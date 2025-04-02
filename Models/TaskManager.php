@@ -5,23 +5,119 @@ require_once 'DashBoard.php';
 require_once 'Controllers/MainController.php';
 require_once 'Models/DashBoardManager.php';
 
-
 /**
- * Class DashBoardManager
+ * Class TaskManager
  * @package GoodStructure\Models
  * @author Nicolas
  * @author Théo Cornu
  */
 class TaskManager extends Model
 {
-
-    /**
-     * TaskManager constructor.
-     */
-
     public function __construct()
     {
         parent::__construct();
+    }
+
+    /**
+     * Retrieve tasks by user ID.
+     *
+     * @param int $userId
+     * @return Task[]
+     */
+    public function getTasksByUserId(int $userId): array
+    {
+        $sql = "SELECT 
+                    t.idTask AS id, 
+                    t.name AS nameTask, 
+                    t.Duration AS duration, 
+                    t.Date AS dateAdded, 
+                    t.DashBoardidDashBoard AS idDashBoard 
+                FROM task t 
+                JOIN dashboard d ON t.DashBoardidDashBoard = d.idDashBoard 
+                WHERE d.UseridUser = ?";
+        $result = $this->executerRequete($sql, [$userId]);
+
+        $tasks = [];
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            $tasks[] = new Task(
+                (int)$row['id'],
+                (string)$row['nameTask'],
+                isset($row['duration']) ? (int)$row['duration'] : null,
+                isset($row['dateAdded']) ? (string)$row['dateAdded'] : null,
+                isset($row['idDashBoard']) ? (int)$row['idDashBoard'] : null
+            );
+        }
+
+        return $tasks;
+    }
+
+    /**
+     * Retrieve tasks by MyHome ID.
+     *
+     * @param int $myHomeId
+     * @return Task[]
+     */
+    public function getTasksByMyHomeId(int $myHomeId): array
+    {
+        $sql = "SELECT 
+                    t.idTask AS id, 
+                    t.name AS nameTask, 
+                    t.Duration AS duration, 
+                    t.Date AS dateAdded, 
+                    t.DashBoardidDashBoard AS idDashBoard 
+                FROM task t 
+                JOIN dashboard d ON t.DashBoardidDashBoard = d.idDashBoard 
+                JOIN users u ON d.UseridUser = u.idUsers 
+                WHERE u.MyHomeIdMyHome = ?";
+        $result = $this->executerRequete($sql, [$myHomeId]);
+
+        $tasks = [];
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            $tasks[] = new Task(
+                (int)$row['id'],
+                (string)$row['nameTask'],
+                isset($row['duration']) ? (int)$row['duration'] : null,
+                isset($row['dateAdded']) ? (string)$row['dateAdded'] : null,
+                isset($row['idDashBoard']) ? (int)$row['idDashBoard'] : null
+            );
+        }
+
+        return $tasks;
+    }
+
+    /**
+     * Retrieve total task duration by user and task name.
+     *
+     * @param int $userId
+     * @param string $taskName
+     * @return int
+     */
+    public function getTaskDurationByUserAndName(int $userId, string $taskName): int
+    {
+        $sql = "SELECT SUM(t.Duration) as total_duration 
+                FROM task t 
+                JOIN dashboard d ON t.DashBoardidDashBoard = d.idDashBoard 
+                WHERE d.UseridUser = ? AND t.name = ?";
+        $result = $this->executerRequete($sql, [$userId, $taskName])->fetch(PDO::FETCH_ASSOC);
+        return (int)($result['total_duration'] ?? 0);
+    }
+
+    /**
+     * Retrieve total task duration by MyHome and task name.
+     *
+     * @param int $myHomeId
+     * @param string $taskName
+     * @return int
+     */
+    public function getTaskDurationByMyHomeAndName(int $myHomeId, string $taskName): int
+    {
+        $sql = "SELECT SUM(t.Duration) as total_duration 
+                FROM task t 
+                JOIN dashboard d ON t.DashBoardidDashBoard = d.idDashBoard 
+                JOIN users u ON d.UseridUser = u.idUsers 
+                WHERE u.MyHomeIdMyHome = ? AND t.name = ?";
+        $result = $this->executerRequete($sql, [$myHomeId, $taskName])->fetch(PDO::FETCH_ASSOC);
+        return (int)($result['total_duration'] ?? 0);
     }
 
     /**
@@ -34,31 +130,31 @@ class TaskManager extends Model
     public function GetAllByDashBoard(int $idDashBoard): ?array
     {
         try {
-
-            // Retrieve the tasks associated with the dashboard
-            $sql = 'SELECT * FROM task WHERE DashBoardidDashBoard = ?';
+            // Retrieve tasks associated with the dashboard.
+            $sql = 'SELECT idTask, name, Duration, Date, DashBoardidDashBoard FROM task WHERE DashBoardidDashBoard = ?';
             $Tasks = [];
             $result = $this->executerRequete($sql, [$idDashBoard]);
-            while ($line = $result->fetch(PDO::FETCH_ASSOC)) {
-                $Task = new Task(
-                    $line['idTask'],
-                    $line['name'],
-                    $line['Duration'],
-                    $line['Date'],
-                    $line['DashBoardidDashBoard'],
-                    
-                );
 
-                $Tasks[] = $Task;
+            while ($line = $result->fetch(PDO::FETCH_ASSOC)) {
+                // Create a new Task object with explicit property setting.
+                $Tasks[] = new Task(
+                    (int)$line['idTask'],
+                    (string)$line['name'],
+                    isset($line['Duration']) ? (int)$line['Duration'] : null,
+                    isset($line['Date']) ? (string)$line['Date'] : null,
+                    isset($line['DashBoardidDashBoard']) ? (int)$line['DashBoardidDashBoard'] : null,
+                );
             }
+
             return count($Tasks) > 0 ? $Tasks : null;
+
         } catch (PDOException $e) {
-            // In case of an error, redirect to the error page with a message
-            $errorMessage = "An error occurred while retrieving data.";
-            header("Location: index.php?action=DashBoard&errorMessage=".urlencode($errorMessage));
+            // Handle error and redirect.
+            header("Location: index.php?action=DashBoard&errorMessage=" . urlencode("An error occurred while retrieving data."));
             exit();
         }
     }
+
 
     /**
      * Retrieve a specific Task by its ID from the database.
@@ -72,14 +168,13 @@ class TaskManager extends Model
         try {
             $sql = 'SELECT * FROM task WHERE idTask = ?';
             $result = $this->executerRequete($sql, [$id]);
-            $line = $result->fetch(PDO::FETCH_ASSOC);
+            $line = $result->fetch();
             $Task = new Task(
                 $line['idTask'],
                 $line['name'],
                 $line['Duration'],
                 $line['Date'],
                 $line['DashBoardidDashboard'],
-                
             );
             return $Task;
         } catch (PDOException $e) {

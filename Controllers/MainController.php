@@ -75,6 +75,7 @@ class MainController {
         $this->displayView("DashBoard", $additionalData);
     }
 
+
     /**
      * Displays the reference page.
      */
@@ -145,25 +146,45 @@ class MainController {
         ];
     }
 
-
     /**
      * Displays the Follow up page
      * @author Enzo
      * @param string|null $message
      */
-    public function FollowUp($message = null): void
+    public function FollowUp($message = null, $additionalDataTask = null): void
     {
-        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/tasks.json');
-        $tasksData = json_decode($tasksJson, true);
+        if ($additionalDataTask) {
 
-        $taskData = $this->calculateTaskDataD(true);
-        $additionalData = array_merge($taskData, [
-            "message" => $message,
-            "tasks" => $tasksData['tasks']
-        ]);
+            $additionalData = [
+                "message" => $message,
+                "tasks" => $additionalDataTask['tasks'],
+                "taskCountPerYear" => $additionalDataTask["taskCountPerYear"],
+                "taskCountPerYearMonth" => $additionalDataTask["taskCountPerYearMonth"],
+                "taskPercent" => $additionalDataTask["taskPercent"],
+                "hoursHomeGlobalPerTask" => $additionalDataTask["hoursHomeGlobalPerTask"],
+                "labels" => $additionalDataTask["labels"]
+            ];
+            $this->displayView("FollowUp", $additionalData);
+        }
+        else{
+            $taskData = $this->calculateTaskDataD(true);
+            $tasksJson = file_get_contents(__DIR__ . '/../Public/data/tasks.json');
+            $taskData = json_decode($tasksJson, true);
 
-        $this->displayView("FollowUp", $additionalData);
+            $additionalData = [
+                "message" => $message,
+                "tasks" => $taskData['tasks'],
+                "taskCountPerYear" => $taskData["taskCountPerYear"],
+                "taskCountPerYearMonth" => $taskData["taskCountPerYearMonth"],
+                "taskPercent" => $taskData["taskPercent"],
+                "hoursHomeGlobalPerTask" => $taskData["hoursHomeGlobalPerTask"],
+                "labels" => $taskData["labels"],
+            ];
+            $this->displayView("FollowUp", $additionalData);
+        }
+
     }
+
 
     /**
      * Updates follow-up specific data

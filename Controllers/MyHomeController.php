@@ -112,6 +112,9 @@
                 // Add a user to a home
                 $this->userManager->UpdateUserHome($idUser, $idHome);
 
+                // set the session variable to the id of the home
+                $_SESSION["IdMyHome"] = $idHome;
+
                 // Redirect to the main page
                 $this->mainController->Index("Welcome to home $username");
             }
