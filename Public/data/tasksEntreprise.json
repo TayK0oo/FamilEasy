@@ -1,0 +1,154 @@
+{
+  "tasks": [
+    {
+      "id": "teamMeeting",
+      "activity": "Réunion d'équipe",
+      "description": "Participation aux réunions de coordination et suivi de projet",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_teamMeeting.png"
+    },
+    {
+      "id": "projectPlanning",
+      "activity": "Planification de projet",
+      "description": "Élaboration des plannings et répartition des ressources",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "2 heures",
+      "example2": "30€",
+      "image": "img_projectPlanning.png"
+    },
+    {
+      "id": "clientPresentation",
+      "activity": "Présentation client",
+      "description": "Préparation et animation de présentations commerciales",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure 30",
+      "example2": "22,50€",
+      "image": "img_clientPresentation.png"
+    },
+    {
+      "id": "reportWriting",
+      "activity": "Rédaction de rapports",
+      "description": "Production de documents techniques et comptes-rendus",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "3 heures",
+      "example2": "45€",
+      "image": "img_reportWriting.png"
+    },
+    {
+      "id": "softwareDevelopment",
+      "activity": "Développement logiciel",
+      "description": "Codage et tests d'applications informatiques",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "4 heures",
+      "example2": "60€",
+      "image": "img_softwareDevelopment.png"
+    },
+    {
+      "id": "budgetManagement",
+      "activity": "Gestion budgétaire",
+      "description": "Suivi des dépenses et analyse financière",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure 15",
+      "example2": "18,75€",
+      "image": "img_budgetManagement.png"
+    },
+    {
+      "id": "hrInterviews",
+      "activity": "Entretiens RH",
+      "description": "Conduite d'entretiens de recrutement et évaluations",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "45 minutes",
+      "example2": "11,25€",
+      "image": "img_hrInterviews.png"
+    },
+    {
+      "id": "qualityControl",
+      "activity": "Contrôle qualité",
+      "description": "Vérification des normes de production",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "2 heures",
+      "example2": "30€",
+      "image": "img_qualityControl.png"
+    },
+    {
+      "id": "itSupport",
+      "activity": "Support technique",
+      "description": "Résolution des incidents informatiques",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_itSupport.png"
+    },
+    {
+      "id": "trainingSession",
+      "activity": "Formation interne",
+      "description": "Animation de sessions de formation pour collaborateurs",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "3 heures",
+      "example2": "45€",
+      "image": "img_trainingSession.png"
+    },
+    {
+      "id": "inventoryManagement",
+      "activity": "Gestion des stocks",
+      "description": "Suivi des entrées/sorties et optimisation des inventaires",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure 30",
+      "example2": "22,50€",
+      "image": "img_inventoryManagement.png"
+    },
+    {
+      "id": "marketingCampaign",
+      "activity": "Campagne marketing",
+      "description": "Conception et déploiement de stratégies publicitaires",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "5 heures",
+      "example2": "75€",
+      "image": "img_marketingCampaign.png"
+    },
+    {
+      "id": "dataAnalysis",
+      "activity": "Analyse de données",
+      "description": "Traitement des données et création de tableaux de bord",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "2 heures 30",
+      "example2": "37,50€",
+      "image": "img_dataAnalysis.png"
+    },
+    {
+      "id": "clientNegotiation",
+      "activity": "Négociation client",
+      "description": "Discussion contractuelle et gestion des relations clients",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_clientNegotiation.png"
+    },
+    {
+      "id": "procurement",
+      "activity": "Approvisionnement",
+      "description": "Gestion des commandes fournisseurs et logistique",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "45 minutes",
+      "example2": "11,25€",
+      "image": "img_procurement.png"
+    }
+  ]
+}

@@ -16,9 +16,10 @@
         private $_gender;
         private $_familyPlace;
         private $_birthDate;
+        private $_userType;
 
         
-        public function __construct(string $firstName='', string $lastName='', string $email='', string $gender='', string $familyPlace='', string $birthDate='')
+        public function __construct(string $firstName='', string $lastName='', string $email='', string $gender='', string $familyPlace='', string $birthDate='',string $userType='')
         {
             
             $this->_firstName = $firstName;
@@ -27,6 +28,7 @@
             $this->_gender = $gender;
             $this->_familyPlace = $familyPlace;
             $this->_birthDate = $birthDate;
+            $this->_userType = $userType;
             
         }
 
@@ -118,6 +120,16 @@
         // Setter for $_dateBirth
         public function setBirthDate(string $birthDate) {
             $this->_birthDate = $birthDate;
+        }
+
+        // Getter for $_userType
+        public function getUserType() {
+            return $this->_userType;
+        }
+
+        // Setter for $_dateBirth
+        public function setUserType(string $userType) {
+            $this->_userType = $userType;
         }
 
         // Getter password

@@ -30,14 +30,13 @@ class UserManager extends Model
             $result = $this->executerRequete($sql);
             while ($line = $result->fetch(PDO::FETCH_ASSOC)) {
                 $User = new User(
-                    $line['login'],
-                    $line['password'],
                     $line['firstName'],
                     $line['lastName'],
                     $line['email'],
                     $line['gender'],
                     $line['FamilyPlace'],
-                    $line['birthDate']
+                    $line['birthDate'],
+                    $line['userType']
                 );
 
                 $Users[] = $User;
@@ -173,7 +172,8 @@ class UserManager extends Model
                     $line['gender'],
                     $line['BirthDate'],
                     $line['email'],
-                    $line['FamilyPlace']
+                    $line['FamilyPlace'],
+                    $line['userType']
                 );
 
                 return $User;
@@ -258,8 +258,8 @@ class UserManager extends Model
             $result = $this->executerRequete($sql);
             $line = $result->fetch();
             $dashBoard->setId($line['idDashBoard']);
-            $sql = ("INSERT INTO users (LastName, FirstName, gender, BirthDate, email, FamilyPlace, LoginidLogin, DashBoardidDashBoard) 
-            VALUES (:value1, :value2, :value3, :value4, :value5, :value6, (SELECT idLogin from login where idLogin = :value7), (SELECT idDashBoard from dashboard where idDashBoard = :value8))");
+            $sql = ("INSERT INTO users (LastName, FirstName, gender, BirthDate, email, FamilyPlace, LoginidLogin, DashBoardidDashBoard, userType)
+            VALUES (:value1, :value2, :value3, :value4, :value5, :value6, (SELECT idLogin from login where idLogin = :value7), (SELECT idDashBoard from dashboard where idDashBoard = :value8), :value9)");
 
             $value1 = $User->getLastName();
             $value2 = $User->getFirstName();
@@ -269,6 +269,7 @@ class UserManager extends Model
             $value6 = $User->getFamilyPlace();
             $value7 = $login->getId();
             $value8 = $dashBoard->getId();
+            $value9 = $User->getUserType();
             $this->executerRequete($sql, [
                 ':value1' => $value1,
                 ':value2' => $value2,
@@ -277,7 +278,8 @@ class UserManager extends Model
                 ':value5' => $value5,
                 ':value6' => $value6,
                 ':value7' => $value7,
-                ':value8' => $value8
+                ':value8' => $value8,
+                ':value9' => $value9
             ]);
 
             // header("Refresh : 1, Location: index.php?action=Index");
@@ -303,14 +305,15 @@ class UserManager extends Model
     public function UpdateUser(User $User): void
     {
         try {
-            $sql = 'UPDATE users SET FirstName = ?, LastName = ?, email = ?, gender = ?, FamilyPlace = ?, BirthDate = ? WHERE idUsers = ?';
+            $sql = 'UPDATE users SET FirstName = ?, LastName = ?, email = ?, gender = ?, FamilyPlace = ?, BirthDate = ?, userType = ? WHERE idUsers = ?';
             $this->executerRequete($sql, [
                 $User->getFirstName(),
                 $User->getLastName(),
                 $User->getEmail(),
                 $User->getGender(),
                 $User->getFamilyPlace(),
-                $User->getBirthDate()
+                $User->getBirthDate(),
+                $User->getUserType(),
             ]);
         } catch (PDOException $e) {
             // In case of an error, redirect to the error page with a message

@@ -101,6 +101,20 @@
                         </div>
                     </div>
 
+                    <div id="userType">
+                        <label>Type</label>
+                        <div class="gender_global">
+                            <div class="gender">
+                                <label for="home">home</label>
+                                <input type="radio" id="home" name="UserType" value="home" class="inputs" required>
+                            </div>
+                            <div class="gender">
+                                <label for="enterprise">enterprise</label>
+                                <input type="radio" id="enterprise" name="UserType" value="enterprise" class="inputs" required>
+                            </div>
+                        </div>
+                    </div>
+
                     <!--FAMILY PLACE-->
                     <div>
                         <label for="selectPlaceFamily"><?= $translations[$language]['registration_placeFamily_desc']?></label>

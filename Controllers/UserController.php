@@ -131,5 +131,6 @@ class UserController{
         $this->User ->setFamilyPlace($this->FamilyPlaceToString());
         $this->User ->setBirthDate($_POST['YearOfBirth'] . "-" . $_POST['MonthOfBirth'] . "-" . $_POST['DayOfBirth']);
         $this->User ->setLogin($_POST['Username']);
+        $this->User ->setUserType($_POST['UserType']);
     } 
 }
