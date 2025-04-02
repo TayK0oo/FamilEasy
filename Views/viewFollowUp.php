@@ -13,7 +13,7 @@ author : Théo Cornu
 
     <!-- Header -->
     <div id="Person">
-        <h1 id="PersonTitle">Surname Name</h1> <!--Displaying the user's first and last name-->
+        <h1 id="PersonTitle"><?= $username ?></h1> <!--Displaying the user's first and last name-->
     </div>
     <!--Buttons-->
     <div class="buttons">

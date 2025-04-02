@@ -162,25 +162,14 @@ class MainController {
                 "taskCountPerYearMonth" => $additionalDataTask["taskCountPerYearMonth"],
                 "taskPercent" => $additionalDataTask["taskPercent"],
                 "hoursHomeGlobalPerTask" => $additionalDataTask["hoursHomeGlobalPerTask"],
-                "labels" => $additionalDataTask["labels"]
+                "labels" => $additionalDataTask["labels"],
+                "username" => $additionalDataTask["username"],
             ];
             $this->displayView("FollowUp", $additionalData);
         }
         else{
-            $taskData = $this->calculateTaskDataD(true);
-            $tasksJson = file_get_contents(__DIR__ . '/../Public/data/tasks.json');
-            $taskData = json_decode($tasksJson, true);
 
-            $additionalData = [
-                "message" => $message,
-                "tasks" => $taskData['tasks'],
-                "taskCountPerYear" => $taskData["taskCountPerYear"],
-                "taskCountPerYearMonth" => $taskData["taskCountPerYearMonth"],
-                "taskPercent" => $taskData["taskPercent"],
-                "hoursHomeGlobalPerTask" => $taskData["hoursHomeGlobalPerTask"],
-                "labels" => $taskData["labels"],
-            ];
-            $this->displayView("FollowUp", $additionalData);
+            $this->displayView("FollowUp", null);
         }
 
     }

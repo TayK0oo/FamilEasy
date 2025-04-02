@@ -52,6 +52,9 @@ class FollowUpController {
         $userId = $this->dashboard->GetIdUser();
         error_log("InfoFollowUp: Retrieved user ID: " . $userId);
 
+        // retrieve username by id
+        $username = $this->dashboard->GetUsername();
+
         $myHomeId = $this->myHomeManager->getMyHomeIdByUserId($userId);
         error_log("InfoFollowUp: Retrieved MyHome ID: " . ($myHomeId ?? 'NULL'));
 
@@ -68,7 +71,8 @@ class FollowUpController {
 
         // Merge data and display view
         $additionalDataTask = array_merge($taskData, [
-            "tasks" => $tasksData['tasks']
+            "tasks" => $tasksData['tasks'],
+            "username" => $username
         ]);
 
         // affiche dans les logs les données supplémentaires
