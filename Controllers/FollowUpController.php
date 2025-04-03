@@ -64,8 +64,11 @@ class FollowUpController {
         //affiche dans les logs les données des taches
         error_log("InfoFollowUp: Task data: " . print_r($taskData, true));
 
-        // Load tasks from JSON
-        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/tasks.json');
+        $user = $this->userManager->GetByLoginId(intval($_SESSION['IdLogin']));
+        $userType = $user->getUserType();
+        // Load the appropriate tasks file based on user type
+        $tasksFile = ($userType === 'enterprise') ? 'tasksEntreprise.json' : 'tasks.json';
+        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/' . $tasksFile);
         $tasksData = json_decode($tasksJson, true);
         error_log("InfoFollowUp: Loaded tasks from JSON.");
 
