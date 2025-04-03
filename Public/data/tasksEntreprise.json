@@ -1,144 +1,134 @@
 {
   "tasks": [
     {
-      "id": "teamMeeting",
-      "activity": "Réunion d'équipe",
-      "description": "Participation aux réunions de coordination et suivi de projet",
-      "quarter": 4,
-      "monetary": 15,
-      "example1": "1 heure",
-      "example2": "15€",
-      "image": "img_teamMeeting.png"
-    },
-    {
-      "id": "projectPlanning",
-      "activity": "Planification de projet",
-      "description": "Élaboration des plannings et répartition des ressources",
+      "id": "documentation",
+      "activity": "Documentation",
+      "description": "Rédaction et mise à jour de documents professionnels",
       "quarter": 4,
       "monetary": 15,
       "example1": "2 heures",
       "example2": "30€",
-      "image": "img_projectPlanning.png"
+      "image": "img_reportWriting.png"
     },
     {
-      "id": "clientPresentation",
-      "activity": "Présentation client",
-      "description": "Préparation et animation de présentations commerciales",
+      "id": "emailManagement",
+      "activity": "Gestion des emails",
+      "description": "Traitement, tri et réponse aux courriels professionnels",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_emailManagement.png"
+    },
+    {
+      "id": "alignmentMeetings",
+      "activity": "Réunions d'alignement",
+      "description": "Participation aux réunions pour harmoniser les stratégies",
       "quarter": 4,
       "monetary": 15,
       "example1": "1 heure 30",
       "example2": "22,50€",
-      "image": "img_clientPresentation.png"
+      "image": "img_teamMeeting.png"
     },
     {
-      "id": "reportWriting",
-      "activity": "Rédaction de rapports",
-      "description": "Production de documents techniques et comptes-rendus",
+      "id": "teamCoordination",
+      "activity": "Coordination entre équipes",
+      "description": "Facilitation de la collaboration entre différentes équipes",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "2 heures",
+      "example2": "30€",
+      "image": "img_teamCoordination.png"
+    },
+    {
+      "id": "followUpMeetings",
+      "activity": "Réunions de suivi",
+      "description": "Analyse des progrès et ajustements des projets",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_followUpMeetings.png"
+    },
+    {
+      "id": "databaseUpdates",
+      "activity": "MAJ des BDD",
+      "description": "Mise à jour et maintenance des bases de données",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "2 heures",
+      "example2": "30€",
+      "image": "img_databaseUpdates.png"
+    },
+    {
+      "id": "practiceSharing",
+      "activity": "Échange de pratiques",
+      "description": "Partage des meilleures pratiques entre collègues",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_practiceSharing.png"
+    },
+    {
+      "id": "workspaceCleaning",
+      "activity": "Nettoyage des espaces de travail",
+      "description": "Rangement et entretien des bureaux et équipements",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "30 minutes",
+      "example2": "7,50€",
+      "image": "img_workspaceCleaning.png"
+    },
+    {
+      "id": "eventOrganization",
+      "activity": "Organisation d'évènements informels",
+      "description": "Planification et coordination d'évènements d'équipe",
       "quarter": 4,
       "monetary": 15,
       "example1": "3 heures",
       "example2": "45€",
-      "image": "img_reportWriting.png"
+      "image": "img_eventOrganization.png"
     },
     {
-      "id": "softwareDevelopment",
-      "activity": "Développement logiciel",
-      "description": "Codage et tests d'applications informatiques",
-      "quarter": 4,
-      "monetary": 15,
-      "example1": "4 heures",
-      "example2": "60€",
-      "image": "img_softwareDevelopment.png"
-    },
-    {
-      "id": "budgetManagement",
-      "activity": "Gestion budgétaire",
-      "description": "Suivi des dépenses et analyse financière",
+      "id": "stressManagement",
+      "activity": "Aide à la gestion du stress et du bien-être des collègues",
+      "description": "Soutien et écoute active pour améliorer le bien-être",
       "quarter": 4,
       "monetary": 15,
       "example1": "1 heure 15",
       "example2": "18,75€",
-      "image": "img_budgetManagement.png"
+      "image": "img_stressManagement.png"
     },
     {
-      "id": "hrInterviews",
-      "activity": "Entretiens RH",
-      "description": "Conduite d'entretiens de recrutement et évaluations",
-      "quarter": 4,
-      "monetary": 15,
-      "example1": "45 minutes",
-      "example2": "11,25€",
-      "image": "img_hrInterviews.png"
-    },
-    {
-      "id": "qualityControl",
-      "activity": "Contrôle qualité",
-      "description": "Vérification des normes de production",
-      "quarter": 4,
-      "monetary": 15,
-      "example1": "2 heures",
-      "example2": "30€",
-      "image": "img_qualityControl.png"
-    },
-    {
-      "id": "itSupport",
-      "activity": "Support technique",
-      "description": "Résolution des incidents informatiques",
+      "id": "technicalSupport",
+      "activity": "Résolution de petits problèmes techniques",
+      "description": "Assistance pour les incidents techniques mineurs",
       "quarter": 4,
       "monetary": 15,
       "example1": "1 heure",
       "example2": "15€",
-      "image": "img_itSupport.png"
+      "image": "img_technicalSupport.png"
     },
     {
-      "id": "trainingSession",
-      "activity": "Formation interne",
-      "description": "Animation de sessions de formation pour collaborateurs",
+      "id": "internalCommunication",
+      "activity": "Veiller à la bonne circulation de l'information",
+      "description": "Assurer la transparence et la diffusion des informations utiles",
+      "quarter": 4,
+      "monetary": 15,
+      "example1": "1 heure",
+      "example2": "15€",
+      "image": "img_internalCommunication.png"
+    },
+    {
+      "id": "professionalNetworks",
+      "activity": "Participation à des réseaux professionnels",
+      "description": "Représentation de l'entreprise dans des groupes externes",
       "quarter": 4,
       "monetary": 15,
       "example1": "3 heures",
       "example2": "45€",
-      "image": "img_trainingSession.png"
-    },
-    {
-      "id": "inventoryManagement",
-      "activity": "Gestion des stocks",
-      "description": "Suivi des entrées/sorties et optimisation des inventaires",
-      "quarter": 4,
-      "monetary": 15,
-      "example1": "1 heure 30",
-      "example2": "22,50€",
-      "image": "img_inventoryManagement.png"
-    },
-    {
-      "id": "marketingCampaign",
-      "activity": "Campagne marketing",
-      "description": "Conception et déploiement de stratégies publicitaires",
-      "quarter": 4,
-      "monetary": 15,
-      "example1": "5 heures",
-      "example2": "75€",
-      "image": "img_marketingCampaign.png"
-    },
-    {
-      "id": "dataAnalysis",
-      "activity": "Analyse de données",
-      "description": "Traitement des données et création de tableaux de bord",
-      "quarter": 4,
-      "monetary": 15,
-      "example1": "2 heures 30",
-      "example2": "37,50€",
-      "image": "img_dataAnalysis.png"
-    },
-    {
-      "id": "clientNegotiation",
-      "activity": "Négociation client",
-      "description": "Discussion contractuelle et gestion des relations clients",
-      "quarter": 4,
-      "monetary": 15,
-      "example1": "1 heure",
-      "example2": "15€",
-      "image": "img_clientNegotiation.png"
+      "image": "img_professionalNetworks.png"
     }
   ]
 }
