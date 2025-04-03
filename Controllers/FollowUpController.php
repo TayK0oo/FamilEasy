@@ -49,15 +49,15 @@ class FollowUpController {
         $username = $this->dashboard->GetUsername();
         $myHomeId = $this->myHomeManager->getMyHomeIdByUserId($userId);
 
-        // Utilisation du TaskService pour les tâches
+        // Utilisation du TaskService pour les tâches du foyer
         $userType = $this->userManager->GetByLoginID($_SESSION['IdLogin'])->getUserType();
-        $tasksData = $this->taskService->getMergedTasks(
-            $userType,
-            intval($_SESSION['IdLogin'])
+        $tasksData = $this->taskService->getMergedTasksForHome(
+            $myHomeId,
+            $userType
         );
 
         // Calcul des données spécifiques
-        $taskData = $this->calculateTaskDataD($userId, $myHomeId);
+        $taskData = $this->calculateTaskDataD($userId, $myHomeId, $tasksData);
 
         // Fusion des données
         $additionalDataTask = array_merge($taskData, [
@@ -67,6 +67,7 @@ class FollowUpController {
 
         $this->mainController->FollowUp(null, $additionalDataTask);
     }
+
     /**
      * Calculate task data for follow-up
      */

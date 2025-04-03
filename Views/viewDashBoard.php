@@ -116,7 +116,7 @@
         
         <div class="divBoutonTache Supr">
             <!-- Bouton d'ajout de tâches -->
-            <a href="index.php?action=TaskSupression&IdTask=<?php if (isset($_SESSION['tasks']) && (end($_SESSION['tasks']))->getId() != null)  : ?> <?= $idLastTast ?> <?php endif; ?>"><button class="boutonTaches Supr" type="button"><?= $translations[$language]['dashboard_button_delete']?></button></a>
+            <a href="index.php?action=TaskSupression&IdTask=<?php if (isset($_SESSION['tasks']) && (end($_SESSION['tasks']))->getId() != null)  : ?> <?= $idLastTask ?> <?php endif; ?>"><button class="boutonTaches Supr" type="button"><?= $translations[$language]['dashboard_button_delete']?></button></a>
             
         </div>
 

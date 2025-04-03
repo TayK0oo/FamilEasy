@@ -18,6 +18,10 @@ function showDetailed() {
         const taskPercentages = JSON.parse(document.getElementById('data3').value);
         const globalPercentages = JSON.parse(document.getElementById('data4').value);
 
+        console.log(tasksData);
+        console.log(taskPercentages);
+        console.log(globalPercentages);
+
         tasksData.forEach(function (task) {
             var flipCard = document.createElement("div");
             flipCard.className = "flip-card";
@@ -75,6 +79,7 @@ function showDetailed() {
             flipCardInner.appendChild(flipCardBack);
             flipCard.appendChild(flipCardInner);
             contentDiv.appendChild(flipCard);
+
         });
 
         var suiviDButton = document.getElementById("suiviD");

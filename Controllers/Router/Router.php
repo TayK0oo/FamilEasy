@@ -89,6 +89,7 @@ class Router {
         "LegalNotice" => new RouteLegalNotice($this->ctrlList["MainController"]),
         "TermsConditions" => new RouteTermsConditions($this->ctrlList["MainController"]),
         "AddTask" =>  new RouteAddTask($this->ctrlList["MainController"]),
+            "AddCustomTask" => new RouteAddCustomTask($this->ctrlList["TaskController"]),
         "ExportPDF" => new RouteExportPDF($this->ctrlList["MainController"])
     ,
         "MyHome" => new RouteMyHome($this->ctrlList["MainController"]),

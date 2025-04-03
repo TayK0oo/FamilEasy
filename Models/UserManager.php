@@ -385,5 +385,62 @@ class UserManager extends Model
             exit();
         }
     }
+
+    /**
+     * Retrieve a list of Users by their MyHome ID.
+     *
+     * @param int $myHomeId The ID of the MyHome.
+     * @return array An array of User objects.
+     * @throws Exception
+     */
+    public function getUsersByMyHomeId(int $myHomeId): array
+    {
+        try {
+            $sql = 'SELECT * FROM users WHERE MyHomeIdMyHome = ?';
+            $users = [];
+            $result = $this->executerRequete($sql, [$myHomeId]);
+            while ($line = $result->fetch(PDO::FETCH_ASSOC)) {
+                $user = new User(
+                    $line['LastName'],
+                    $line['FirstName'],
+                    $line['gender'],
+                    $line['BirthDate'],
+                    $line['email'],
+                    $line['FamilyPlace'],
+                    $line['userType']
+                );
+                $user->setId($line['idUsers']);
+                $users[] = $user;
+            }
+            return $users;
+        } catch (PDOException $e) {
+            // In case of an error, redirect to the error page with a message
+            $errorMessage = "An error occurred while retrieving users by MyHome ID.";
+            header("Location: index.php?action=Index&errorMessage=".urlencode($errorMessage));
+            exit();
+        }
+    }
+
+   /**
+    * Retrieve a idLogin of a user
+    *
+    * @param User $user The user to retrieve.
+    * @return int|null The ID of the Login, or null if not found.
+    * @throws Exception
+    */
+    public function GetIdLoginByUser(User $user): ?int
+    {
+        try {
+            $sql = 'SELECT LoginidLogin FROM users WHERE idUsers = ?';
+            $result = $this->executerRequete($sql, [$user->getId()]);
+            $line = $result->fetch(PDO::FETCH_ASSOC);
+            return $line['LoginidLogin'];
+        } catch (PDOException $e) {
+            // In case of an error, redirect to the error page with a message
+            $errorMessage = "An error occurred while retrieving data(idLogin).";
+            header("Location: index.php?action=Index&errorMessage=".urlencode($errorMessage));
+            exit();
+        }
+    }
 }
 ?>

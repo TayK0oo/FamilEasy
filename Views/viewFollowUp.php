@@ -7,7 +7,7 @@ author : Théo Cornu
 <?php require 'translations.php' ?>
 <link rel="stylesheet" href="Public/css/followUp24.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="Public/Animation_js/followUp6.js"></script>
+<script src="Public/Animation_js/followUp7.js"></script>
 
 <div id = "viewFollowUp">
 

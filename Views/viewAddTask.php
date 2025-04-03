@@ -11,13 +11,16 @@
         <div id="rightPart">
             <h1>Ajouter une tâche</h1>
             <p>Remplissez les informations ci-dessous pour ajouter une nouvelle tâche.</p>
-            <form action="index.php?action=AddTask" method="post">
+            <form action="index.php?action=AddCustomTask" method="post">
+                <!-- Champ caché pour l'ID généré (optionnel) -->
+                <input type="hidden" name="generated_id" id="generated_id">
+
+                <!-- Ajouter un feedback utilisateur -->
+                <?php if(isset($_GET['error'])): ?>
+                    <div class="error-message"><?= htmlspecialchars($_GET['error']) ?></div>
+                <?php endif; ?>
                 <fieldset>
                     <div class="formConnect">
-                        <div class="infoSend">
-                            <label for="id">Identifiant</label><br>
-                            <input type="text" id="id" name="id" class="inputs" required>
-                        </div>
                         <div class="infoSend">
                             <label for="activity">Activité</label><br>
                             <input type="text" id="activity" name="activity" class="inputs" required>

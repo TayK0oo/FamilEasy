@@ -1,6 +1,7 @@
 <?php
 
 use Controllers\MainController;
+use Models\TaskService;
 
 require_once 'Views/View.php';
 require_once 'Models/TaskManager.php';
@@ -20,7 +21,8 @@ class TaskController
    private MainController $MainController;
    private DashBoardManager $DashBoardManager;
    private TaskManager $TaskManager;  
-   private Task $Task; 
+   private Task $Task;
+    private TaskService $taskService;
 
    /**
     * TaskController constructor.
@@ -33,6 +35,7 @@ class TaskController
       $this->DashBoardManager = new DashBoardManager();
       $this->TaskManager = new TaskManager();
       $this->Task = new Task();
+       $this->taskService = new TaskService();
    }
 
    /**
@@ -134,29 +137,90 @@ class TaskController
       $this->Task->setIdDashBoard($this->DashBoardManager->GetIdDashBoardByLoginId($_SESSION['IdLogin']));
    }
 
-   /**
-    * Get all Tasks.
-    * @author Théo
-    */
-   public function getAllTasks()
-   {
-      // Get all Tasks
-      $tasks = $this->TaskManager->GetAllByDashBoard($this->DashBoardManager->GetIdDashBoardByLoginId($_SESSION['IdLogin']));
-      // Display the main page with all Tasks
-      $this->MainController->DashBoard($tasks);
-   }
+    /**
+     * Gestion de l'ajout de tâche personnalisée
+     */
+    public function AddCustomTask()
+    {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $taskData = [
+                'id' => $this->generateTaskId($_POST['activity']),
+                'activity' => $_POST['activity'],
+                'description' => $_POST['description'],
+                'quarter' => (int)$_POST['quarter'],
+                'monetary' => (float)$_POST['monetary'],
+                'example1' => $_POST['example1'] ?? '',
+                'example2' => $_POST['example2'] ?? '',
+                'image' => $_POST['image'] ?? 'default_task.png'
+            ];
 
-   /**
-    * Get all Tasks by idLogin.
-    * @author Théo
-    */
-   public function getAllTasksByIdLogin()
-   {
-      // Get all Tasks by idLogin
-      $tasks = $this->TaskManager->GetAllTasksByIdLogin($_GET['idLogin']);
-      // Display the main page with all Tasks by idLogin
-      $this->DashBoardController->Dashboard($tasks);
-   }
+            if ($this->taskService->addCustomTask($_SESSION['IdLogin'], $taskData)) {
+                $this->DashBoardController->infoDashBoard("Tâche personnalisée ajoutée");
+            } else {
+                $this->DashBoardController->infoDashBoard("Erreur lors de l'ajout");
+            }
+        } else {
+            $this->showCustomTaskForm();
+        }
+    }
+
+    /**
+     * Affichage du formulaire d'ajout
+     */
+    private function showCustomTaskForm()
+    {
+        $view = new View("viewAddTask"); // Correspond au fichier de vue
+        $view->generer([]);
+    }
+
+
+    /**
+     * Modifie une tâche personnalisée existante
+     * @author [Votre nom]
+     */
+    public function UpdateCustomTask()
+    {
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['taskId'])) {
+            $newData = [
+                'activity' => $_POST['activity'],
+                'description' => $_POST['description'],
+                'quarter' => $_POST['quarter'] ?? 1,
+                'monetary' => $_POST['monetary'] ?? 0,
+                'example1' => $_POST['example1'] ?? '',
+                'example2' => $_POST['example2'] ?? '',
+                'image' => $_POST['image'] ?? 'default_task.png'
+            ];
+
+            if ($this->taskService->updateCustomTask($_SESSION['IdLogin'], $_GET['taskId'], $newData)) {
+                $this->DashBoardController->infoDashBoard("Tâche mise à jour");
+            } else {
+                $this->DashBoardController->infoDashBoard("Erreur de mise à jour");
+            }
+        }
+    }
+
+    /**
+     * Supprime une tâche personnalisée
+     * @author [Votre nom]
+     */
+    public function DeleteCustomTask()
+    {
+        if (isset($_GET['taskId'])) {
+            if ($this->taskService->deleteCustomTask($_SESSION['IdLogin'], $_GET['taskId'])) {
+                $this->DashBoardController->infoDashBoard("Tâche supprimée");
+            } else {
+                $this->DashBoardController->infoDashBoard("Erreur de suppression");
+            }
+        }
+    }
+
+    /**
+     * Génère un ID unique basé sur le nom de l'activité
+     */
+    private function generateTaskId(string $activity): string
+    {
+        return strtolower(str_replace(' ', '_', $activity)) . '_' . uniqid();
+    }
 
 
 }
