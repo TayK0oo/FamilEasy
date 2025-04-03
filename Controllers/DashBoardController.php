@@ -1,4 +1,7 @@
 <?php
+
+use Controllers\MainController;
+
 require_once __DIR__ . '/../Views/View.php';
 require_once __DIR__ . '/../Models/DashBoardManager.php';
 require_once __DIR__ . '/../Models/TaskManager.php';

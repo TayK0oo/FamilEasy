@@ -1,4 +1,7 @@
 <?php
+
+use Controllers\MainController;
+
 require_once 'Views/View.php';
 require_once 'Models/TaskManager.php';
 require_once 'Models/UserManager.php';

@@ -1,5 +1,8 @@
 <?php
-    /**
+
+use Controllers\MainController;
+
+/**
      * Class RouteFollowUp
      * @author Lola
      */
