@@ -1,5 +1,8 @@
 <?php
-    require_once 'MainController.php';
+
+use Controllers\MainController;
+
+require_once 'MainController.php';
     require_once 'Models/MyHomeManager.php';
     require_once 'Models/UserManager.php';
 

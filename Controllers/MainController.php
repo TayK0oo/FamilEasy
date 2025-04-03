@@ -1,19 +1,28 @@
 <?php
-require_once __DIR__ . '/../Views/View.php';
-/**
- * Class MainController
- * @package Controllers
- * @author Théo Cornu
- */
-class MainController {
-    private $viewData = [];
-    private $userManager;
 
-    public function __construct() {
+namespace Controllers;
+require_once __DIR__ . '/../Views/View.php';
+
+use DateTime;
+use Models\TaskService;
+use UserManager;
+use View;
+
+
+
+
+class MainController
+{
+    private array $viewData;
+    private UserManager $userManager;
+    private TaskService $taskService;
+
+    public function __construct()
+    {
         $this->viewData = $this->initializeViewData();
         $this->userManager = new UserManager();
+        $this->taskService = new TaskService(); // Initialisation interne
     }
-
     /**
      * Generic method to display a view
      * @param string $viewName
@@ -23,6 +32,21 @@ class MainController {
         $view = new View($viewName);
         $data = array_merge($this->viewData, $additionalData);
         $view->generer($data);
+    }
+
+    /**
+     * Affiche la page de référence avec les tâches fusionnées
+     */
+    public function Reference(): void
+    {
+        $user = $this->userManager->GetByLoginId(intval($_SESSION['IdLogin']));
+
+        $tasks = $this->taskService->getMergedTasks(
+            $user->getUserType(),
+            intval($_SESSION['IdLogin'])
+        );
+
+        $this->displayView("Reference", ['tasks' => $tasks]);
     }
 
     /**
@@ -58,56 +82,6 @@ class MainController {
     public function Registration() {
         $this->displayView("Registration");
     }
-
-    /**
-     * Displays the dashboard page.
-     */
-    public function DashBoard($message = null, $idLastTask = null, $nameLastTask = null, $durationLastTask = null, $dateLastTask = null) {
-        $taskData = $this->calculateTaskDataD();
-        $user = $this->userManager->GetByLoginId(intval($_SESSION['IdLogin']));
-        $userType = $user->getUserType();
-        // Load the appropriate tasks file based on user type
-        $tasksFile = ($userType === 'enterprise') ? 'tasksEntreprise.json' : 'tasks.json';
-        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/' . $tasksFile);
-        $tasksData = json_decode($tasksJson, true);
-
-        $additionalData = [
-            "message" => $message,
-            "idLastTask" => $idLastTask,
-            "nameLastTask" => $nameLastTask,
-            "durationLastTaskhours" => floor($durationLastTask * 15 / 60),
-            "durationLastTaskminutes" => ($durationLastTask * 15) % 60,
-            "dateLastTask" => $dateLastTask,
-            "labels" => $taskData["labels"],
-            "data1" => $taskData["data1"],
-            "data2" => $taskData["data2"],
-            "tasks" => $tasksData['tasks']
-        ];
-        $this->displayView("DashBoard", $additionalData);
-    }
-
-
-    /**
-     * Displays the reference page.
-     */
-    public function Reference(): void
-    {
-        $user = $this->userManager->GetByLoginId(intval($_SESSION['IdLogin']));
-        // Determine the user's type (enterprise or home)
-        $userType = $user->getUserType();
-
-        // Load the appropriate tasks file based on user type
-        $tasksFile = ($userType === 'enterprise') ? 'tasksEntreprise.json' : 'tasks.json';
-        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/' . $tasksFile);
-        $tasksData = json_decode($tasksJson, true);
-
-        // Pass the tasks data to the view
-        $this->displayView("Reference", [
-            'tasks' => $tasksData['tasks']
-        ]);
-    }
-
-
 
     /**
      * Displays various policy and legal pages.
@@ -216,6 +190,44 @@ class MainController {
             $data["taskCountPerYearMonth"][$year][$month][$taskName]++;
         }
     }
+
+
+
+    /**
+     * Affiche le tableau de bord
+     */
+    public function DashBoard($message = null, $idLastTask = null, $nameLastTask = null, $durationLastTask = null, $dateLastTask = null)
+    {
+        // Récupération du type d'utilisateur
+        $user = $this->userManager->GetByLoginId($_SESSION['IdLogin']);
+        $userType = $user->getUserType();
+
+        // Utilisation du service pour les tâches
+        $tasksData = $this->taskService->getMergedTasks(
+            $userType,
+            intval($_SESSION['IdLogin'])
+        );
+
+        // Calcul des données spécifiques
+        $taskData = $this->calculateTaskDataD();
+
+        // Préparation des données
+        $additionalData = [
+            "message" => $message,
+            "idLastTask" => $idLastTask,
+            "nameLastTask" => $nameLastTask,
+            "durationLastTaskhours" => floor($durationLastTask * 15 / 60),
+            "durationLastTaskminutes" => ($durationLastTask * 15) % 60,
+            "dateLastTask" => $dateLastTask,
+            "labels" => $taskData["labels"],
+            "data1" => $taskData["data1"],
+            "data2" => $taskData["data2"],
+            "tasks" => $tasksData // Utilisation directe du tableau fusionné
+        ];
+
+        $this->displayView("DashBoard", $additionalData);
+    }
+
     /**
      * Calculates the task data for the dashboard and follow-up.
      * @param bool $isFollowUp

@@ -1,4 +1,7 @@
 <?php
+
+use Controllers\MainController;
+
 require_once 'Controllers/Router/Route.php';
 
 /**

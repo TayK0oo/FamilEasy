@@ -4,6 +4,9 @@
  *
  * @author Théo Cornu
  */
+
+use Controllers\MainController;
+
 foreach (glob("Controllers/*.php") as $filename) {
     require_once $filename;
 };

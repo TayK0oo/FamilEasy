@@ -1,4 +1,8 @@
 <?php
+
+use Controllers\MainController;
+use Models\TaskService;
+
 require_once 'Views/View.php';
 require_once 'Controllers/MainController.php';
 require_once 'Models/DashBoardManager.php';
@@ -6,12 +10,8 @@ require_once 'Models/UserManager.php';
 require_once 'Models/TaskManager.php';
 require_once 'Models/LoginManager.php';
 require_once 'Models/MyHomeManager.php';
+require_once 'Models/TaskService.php'; // Ajout du service
 
-/**
- * Class FollowUpController
- * @author Enzo
- * @author [Your Name]
- */
 class FollowUpController {
     private $mainController;
     private $taskManager;
@@ -20,6 +20,7 @@ class FollowUpController {
     private $dashboardManager;
     private $myHomeManager;
     private $dashboard;
+    private TaskService $taskService; // Déclaration du service
 
     public function __construct() {
         $this->mainController = new MainController();
@@ -29,11 +30,9 @@ class FollowUpController {
         $this->dashboardManager = new DashBoardManager();
         $this->myHomeManager = new MyHomeManager();
         $this->dashboard = new DashBoard();
+        $this->taskService = new TaskService(); // Initialisation du service
     }
 
-    /**
-     * Display the follow-up page
-     */
     public function InfoFollowUp() {
         error_log("InfoFollowUp: Starting follow-up process...");
 
@@ -43,48 +42,31 @@ class FollowUpController {
             return;
         }
 
-        error_log("InfoFollowUp: User is logged in.");
-
-        // Update dashboard
         $this->UpdateDashboard();
 
-        // Retrieve user and home IDs
+        // Récupération des données utilisateur
         $userId = $this->dashboard->GetIdUser();
-        error_log("InfoFollowUp: Retrieved user ID: " . $userId);
-
-        // retrieve username by id
         $username = $this->dashboard->GetUsername();
-
         $myHomeId = $this->myHomeManager->getMyHomeIdByUserId($userId);
-        error_log("InfoFollowUp: Retrieved MyHome ID: " . ($myHomeId ?? 'NULL'));
 
-        // Calculate task data
+        // Utilisation du TaskService pour les tâches
+        $userType = $this->userManager->GetByLoginID($_SESSION['IdLogin'])->getUserType();
+        $tasksData = $this->taskService->getMergedTasks(
+            $userType,
+            intval($_SESSION['IdLogin'])
+        );
+
+        // Calcul des données spécifiques
         $taskData = $this->calculateTaskDataD($userId, $myHomeId);
 
-        //affiche dans les logs les données des taches
-        error_log("InfoFollowUp: Task data: " . print_r($taskData, true));
-
-        $user = $this->userManager->GetByLoginId(intval($_SESSION['IdLogin']));
-        $userType = $user->getUserType();
-        // Load the appropriate tasks file based on user type
-        $tasksFile = ($userType === 'enterprise') ? 'tasksEntreprise.json' : 'tasks.json';
-        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/' . $tasksFile);
-        $tasksData = json_decode($tasksJson, true);
-        error_log("InfoFollowUp: Loaded tasks from JSON.");
-
-        // Merge data and display view
+        // Fusion des données
         $additionalDataTask = array_merge($taskData, [
-            "tasks" => $tasksData['tasks'],
+            "tasks" => $tasksData,
             "username" => $username
         ]);
 
-        // affiche dans les logs les données supplémentaires
-        error_log("InfoFollowUp: Additional data: " . print_r($additionalDataTask, true));
-
-        error_log("InfoFollowUp: Displaying follow-up view.");
         $this->mainController->FollowUp(null, $additionalDataTask);
     }
-
     /**
      * Calculate task data for follow-up
      */

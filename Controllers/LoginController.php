@@ -4,6 +4,8 @@
  * @author Théo Cornu
  */
 
+use Controllers\MainController;
+
 require_once 'Views/View.php';
 require_once 'Models/LoginManager.php';
 require_once 'Controllers/MainController.php';
