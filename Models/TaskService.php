@@ -180,32 +180,52 @@ class TaskService
         return array_values($merged);
     }
 
-    /**
+   /**
      * Récupère toutes les tâches personnalisées d'un foyer
      */
     public function getMergedTasksForHome(int $myHomeId, string $userType): array
     {
+        error_log("getMergedTasksForHome: Starting to merge tasks for home ID $myHomeId and user type $userType.");
         try {
             // 1. Charger le fichier de base
             $baseFile = ($userType === 'enterprise') ? 'tasksEntreprise.json' : 'tasks.json';
             $baseData = $this->loadJsonFile($this->dataPath . $baseFile);
+            error_log("getMergedTasksForHome: Loaded base file $baseFile.");
 
             // 2. Récupérer les utilisateurs du foyer
             $users = $this->userManager->getUsersByMyHomeId($myHomeId);
+            error_log("getMergedTasksForHome: Retrieved " . count($users) . " users for home ID $myHomeId.");
 
             // 3. Charger les personnalisations de tous les utilisateurs
             $customTasks = [];
             foreach ($users as $user) {
-                $userId = $user->getId();
+                $userId = $this->userManager->GetIdLoginByUser($user);
                 $customFile = $this->customPath . $userId . '_custom.json';
 
                 if (file_exists($customFile)) {
                     $customData = $this->loadJsonFileIfExists($customFile);
                     $customTasks = array_merge($customTasks, $customData['tasks']);
+                    error_log("getMergedTasksForHome: Loaded custom tasks for user ID $userId.");
+                } else {
+                    error_log("getMergedTasksForHome: No custom tasks file found for user ID $userId.");
                 }
             }
-            error_log('getMergedTasksForHome: ' . count($customTasks) . ' tâches personnalisées trouvées.');
-            return $this->mergeTasks($baseData['tasks'], $customTasks);
+
+            // 4. Fusionner les tâches de base et personnalisées
+            $merged = $this->mergeTasks($baseData['tasks'], $customTasks);
+            error_log("========================================================================");
+
+            // Récapitulatif final
+            error_log("getMergedTasksForHome: RECAP - Fusion terminée");
+            error_log("getMergedTasksForHome: Type utilisateur: $userType");
+            error_log("getMergedTasksForHome: Fichier de base: $baseFile");
+            error_log("getMergedTasksForHome: Utilisateurs trouvés: " . count($users));
+            error_log("getMergedTasksForHome: Tâches de base: " . count($baseData['tasks']));
+            error_log("getMergedTasksForHome: Tâches personnalisées: " . count($customTasks));
+            error_log("getMergedTasksForHome: Total tâches fusionnées: " . count($merged));
+            error_log("========================================================================");
+
+            return $merged;
 
         } catch (\Exception $e) {
             error_log('Erreur getMergedTasksForHome : ' . $e->getMessage());

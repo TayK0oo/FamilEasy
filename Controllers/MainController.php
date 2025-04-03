@@ -41,9 +41,9 @@ class MainController
     {
         $user = $this->userManager->GetByLoginId(intval($_SESSION['IdLogin']));
 
-        $tasks = $this->taskService->getMergedTasks(
-            $user->getUserType(),
-            intval($_SESSION['IdLogin'])
+        $tasks = $this->taskService->getMergedTasksForHome(
+            $this->userManager->GetIdMyHomeByIdUser($this->userManager->GetIdUserByLoginId($_SESSION['IdLogin']) ),
+            $user->getUserType()
         );
 
         $this->displayView("Reference", ['tasks' => $tasks]);

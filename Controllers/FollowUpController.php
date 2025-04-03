@@ -68,84 +68,90 @@ class FollowUpController {
         $this->mainController->FollowUp(null, $additionalDataTask);
     }
 
-    /**
-     * Calculate task data for follow-up
-     */
-    private function calculateTaskDataD($userId, $myHomeId): array {
-        error_log("calculateTaskDataD: Calculating task data...");
+   /**
+ * Calculate task data for follow-up
+ */
+private function calculateTaskDataD($userId, $myHomeId): array {
+    error_log("calculateTaskDataD: Calculating task data...");
 
-        $data = [
-            "labels" => [],
-            "taskPercent" => [],
-            "hoursHomeGlobalPerTask" => [],
-            "taskCountPerYearMonth" => [],
-            "taskCountPerYear" => []
-        ];
+    $data = [
+        "labels" => [],
+        "taskPercent" => [],
+        "hoursHomeGlobalPerTask" => [],
+        "taskCountPerYearMonth" => [],
+        "taskCountPerYear" => []
+    ];
 
-        // Retrieve tasks for user and home
-        $userTasks = $this->taskManager->getTasksByUserId($userId);
-        error_log("calculateTaskDataD: Retrieved " . count($userTasks) . " user tasks.");
+    // Retrieve tasks for user and home
+    $userTasks = $this->taskManager->getTasksByUserId($userId);
+    error_log("calculateTaskDataD: Retrieved " . count($userTasks) . " user tasks.");
 
-        $homeTasks = $this->taskManager->getTasksByMyHomeId($myHomeId);
-        error_log("calculateTaskDataD: Retrieved " . count($homeTasks) . " home tasks.");
+    $homeTasks = $this->taskManager->getTasksByMyHomeId($myHomeId);
+    error_log("calculateTaskDataD: Retrieved " . count($homeTasks) . " home tasks.");
 
-        foreach ($userTasks as $task) {
-            if (empty($task->getNameTask())) {
-                error_log("calculateTaskDataD: Skipping task with empty name.: " . $task->__toString());
-                continue; // Skip invalid tasks.
-            }
-
-            $taskName = $task->getNameTask();
-            if (!in_array($taskName, $data["labels"])) {
-                error_log("calculateTaskDataD: Adding task label: " . $taskName);
-                $data["labels"][] = $taskName;
-            }
-            $this->updateFollowUpData($data, $task);
+    foreach ($userTasks as $task) {
+        if (empty($task->getNameTask())) {
+            continue; // Skip invalid tasks.
         }
 
-        foreach ($homeTasks as $task) {
-            if (empty($task->getNameTask())) {
-                error_log("calculateTaskDataD: Skipping home task with empty name.");
-                continue; // Skip invalid tasks.
-            }
-
-            $taskName = $task->getNameTask();
-            if (!isset($data["hoursHomeGlobalPerTask"][$taskName])) {
-                error_log("calculateTaskDataD: Initializing hours for task: " . $taskName);
-                $data["hoursHomeGlobalPerTask"][$taskName] = 0;
-            }
-
-            if ($task->getDuration() !== null) {
-                error_log("calculateTaskDataD: Adding duration for task: " . $taskName);
-                $data["hoursHomeGlobalPerTask"][$taskName] += ($task->getDuration() / 4); // Convert to hours
-            } else {
-                error_log("calculateTaskDataD: Task duration is missing for task: " . $taskName);
-            }
+        $taskName = $task->getNameTask();
+        if (!in_array($taskName, $data["labels"])) {
+            $data["labels"][] = $taskName;
         }
-
-        foreach ($data["labels"] as $label) {
-            // Calculate percentages
-            error_log("calculateTaskDataD: Calculating percentages for task: " . $label);
-
-            $userTaskDuration = (int)$this->taskManager->getTaskDurationByUserAndName($userId, $label);
-            error_log("calculateTaskDataD: User duration for task '$label': " . $userTaskDuration);
-
-            $homeTaskDuration = (int)$this->taskManager->getTaskDurationByMyHomeAndName($myHomeId, $label);
-            error_log("calculateTaskDataD: Home duration for task '$label': " . ($homeTaskDuration ?? 0));
-
-            if ($homeTaskDuration > 0) {
-                // Avoid division by zero
-                error_log("calculateTaskDataD: Calculating percentage for task '$label'.");
-                $data["taskPercent"][$label] = ceil(($userTaskDuration * 100) / max(1, $homeTaskDuration));
-            } else {
-                error_log("calculateTaskDataD: No home duration for task '$label'. Setting percentage to 0.");
-                $data["taskPercent"][$label] = 0;
-            }
-        }
-
-        return $data;
+        $this->updateFollowUpData($data, $task);
     }
 
+    foreach ($homeTasks as $task) {
+        if (empty($task->getNameTask())) {
+            continue; // Skip invalid tasks.
+        }
+
+        $taskName = $task->getNameTask();
+        if (!isset($data["hoursHomeGlobalPerTask"][$taskName])) {
+            $data["hoursHomeGlobalPerTask"][$taskName] = 0;
+        }
+
+        if ($task->getDuration() !== null) {
+            $data["hoursHomeGlobalPerTask"][$taskName] += ($task->getDuration() / 4); // Convert to hours
+        } else {
+            error_log("calculateTaskDataD: Task duration is missing for task: " . $taskName);
+        }
+    }
+
+    error_log("calculateTaskDataD: Merging task data for home tasks.");
+    foreach ($data["labels"] as $label) {
+        // Calculate percentages
+        error_log("calculateTaskDataD: Calculating percentages for task: " . $label);
+
+        $userTaskDuration = (int)$this->taskManager->getTaskDurationByUserAndName($userId, $label);
+        error_log("calculateTaskDataD: User duration for task '$label': " . $userTaskDuration);
+
+        $homeTaskDuration = (int)$this->taskManager->getTaskDurationByMyHomeAndName($myHomeId, $label);
+        error_log("calculateTaskDataD: Home duration for task '$label': " . ($homeTaskDuration ?? 0));
+
+        if ($homeTaskDuration > 0) {
+            // Avoid division by zero
+            error_log("calculateTaskDataD: Calculating percentage for task '$label'.");
+            $data["taskPercent"][$label] = ceil(($userTaskDuration * 100) / max(1, $homeTaskDuration));
+        } else {
+            error_log("calculateTaskDataD: No home duration for task '$label'. Setting percentage to 0.");
+            $data["taskPercent"][$label] = 0;
+        }
+    }
+    error_log("========================================================================");
+
+    // Récapitulatif final
+    error_log("calculateTaskDataD: RECAP - Données calculées");
+    error_log("calculateTaskDataD: Labels: " . implode(", ", $data["labels"]));
+    error_log("calculateTaskDataD: Pourcentages par tâche: " . json_encode($data["taskPercent"]));
+    error_log("calculateTaskDataD: Heures globales: " . json_encode($data["hoursHomeGlobalPerTask"]));
+    error_log("calculateTaskDataD: Tâches par année: " . json_encode($data["taskCountPerYear"]));
+    error_log("calculateTaskDataD: Tâches par mois/année: " . json_encode($data["taskCountPerYearMonth"]));
+    error_log("========================================================================");
+    return $data;
+
+
+}
     /**
      * Update follow-up specific data
      */
