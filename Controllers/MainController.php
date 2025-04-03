@@ -59,7 +59,11 @@ class MainController {
      */
     public function DashBoard($message = null, $idLastTask = null, $nameLastTask = null, $durationLastTask = null, $dateLastTask = null) {
         $taskData = $this->calculateTaskDataD();
-        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/tasksEntreprise.json');
+        $user = $this->userManager->GetByLoginId(intval($_SESSION['IdLogin']));
+        $userType = $user->getUserType();
+        // Load the appropriate tasks file based on user type
+        $tasksFile = ($userType === 'enterprise') ? 'tasksEntreprise.json' : 'tasks.json';
+        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/' . $tasksFile);
         $tasksData = json_decode($tasksJson, true);
 
         $additionalData = [
