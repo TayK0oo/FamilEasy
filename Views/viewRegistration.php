@@ -150,6 +150,14 @@
                             <label for="otherPlace">
                             <input name="otherPlace" value="otherPlace" type="checkbox" id="otherPlace" /><?= $translations[$language]['registration_placeFamily_otherPlace']?></label>
                         </div>
+                        <div id="checkboxes" style="display:none;">
+                            <label for="parent">
+                                <input name="parent" value="parent" type="checkbox" id="parent" /><?= $translations[$language]['registration_placeFamily_parent']?></label>
+                            <label for="child">
+                                <input name="child" value="child" type="checkbox" id="child" /><?= $translations[$language]['registration_placeFamily_child']?></label>
+                            <label for="grandParent">
+                                <input name="grandParent" value="grandParent" type="checkbox" id="grandParent" /><?= $translations[$language]['registration_placeFamily_grandparent']?></label>
+                        </div>
                     </div>
 
                     <!--CONDITIONS-->

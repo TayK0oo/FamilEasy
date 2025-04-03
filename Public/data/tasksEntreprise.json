@@ -139,16 +139,6 @@
       "example1": "1 heure",
       "example2": "15€",
       "image": "img_clientNegotiation.png"
-    },
-    {
-      "id": "procurement",
-      "activity": "Approvisionnement",
-      "description": "Gestion des commandes fournisseurs et logistique",
-      "quarter": 4,
-      "monetary": 15,
-      "example1": "45 minutes",
-      "example2": "11,25€",
-      "image": "img_procurement.png"
     }
   ]
 }

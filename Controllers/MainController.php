@@ -7,9 +7,11 @@ require_once __DIR__ . '/../Views/View.php';
  */
 class MainController {
     private $viewData = [];
+    private $userManager;
 
     public function __construct() {
         $this->viewData = $this->initializeViewData();
+        $this->userManager = new UserManager();
     }
 
     /**
@@ -57,7 +59,7 @@ class MainController {
      */
     public function DashBoard($message = null, $idLastTask = null, $nameLastTask = null, $durationLastTask = null, $dateLastTask = null) {
         $taskData = $this->calculateTaskDataD();
-        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/tasks.json');
+        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/tasksEntreprise.json');
         $tasksData = json_decode($tasksJson, true);
 
         $additionalData = [
@@ -81,9 +83,16 @@ class MainController {
      */
     public function Reference(): void
     {
-        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/tasks.json');
+        $user = $this->userManager->GetByLoginId(intval($_SESSION['IdLogin']));
+        // Determine the user's type (enterprise or home)
+        $userType = $user->getUserType();
+
+        // Load the appropriate tasks file based on user type
+        $tasksFile = ($userType === 'enterprise') ? 'tasksEntreprise.json' : 'tasks.json';
+        $tasksJson = file_get_contents(__DIR__ . '/../Public/data/' . $tasksFile);
         $tasksData = json_decode($tasksJson, true);
 
+        // Pass the tasks data to the view
         $this->displayView("Reference", [
             'tasks' => $tasksData['tasks']
         ]);

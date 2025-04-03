@@ -32,11 +32,54 @@ class Task
     }
 
     /**
+     * Set the value of id
+     *
+     * @return  self
+     */
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Get the value of nameTask.
      */
     public function getNameTask(): string
     {
         return $this->nameTask;
+    }
+
+    /**
+     * @param string $nameTask
+     * @return void
+     */
+    public function setNameTask(string $nameTask): self
+    {
+        $this->nameTask = $nameTask;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of duration.
+     */
+    public function setDuration(int $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of dateAdded.
+     */
+    public function setDateAdded(string $dateAdded): self
+    {
+        $this->dateAdded = $dateAdded;
+
+        return $this;
     }
 
     /**
@@ -61,6 +104,16 @@ class Task
     public function getIdDashBoard(): ?int
     {
         return $this->idDashBoard;
+    }
+
+    /**
+     * Set the value of idDashBoard.
+     */
+    public function setIdDashBoard(int $idDashBoard): self
+    {
+        $this->idDashBoard = $idDashBoard;
+
+        return $this;
     }
 
     /**
