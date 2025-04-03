@@ -47,6 +47,11 @@ class MainController {
         $this->displayView("Connection");
     }
 
+    public function AddTask()
+    {
+        $this->displayView("AddTask");
+    }
+
     /**
      * Displays the registration page.
      */
