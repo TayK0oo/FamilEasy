@@ -55,6 +55,9 @@ class TaskService
                 if ($task['id'] === $taskData['id']) {
                     throw new \Exception("Une tâche avec cet ID existe déjà");
                 }
+                if($taskData['image'] === ''){
+                    $taskData['image'] = 'img_diy.png';
+                }
             }
 
             // Formatage des données optionnelles
@@ -63,7 +66,7 @@ class TaskService
                 'monetary' => 0,
                 'example1' => '',
                 'example2' => '',
-                'image' => 'default_task.png' // Image par défaut
+                'image' => '' // Image par défaut
             ], $taskData);
 
             // Ajout de la nouvelle tâche

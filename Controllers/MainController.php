@@ -198,14 +198,11 @@ class MainController
      */
     public function DashBoard($message = null, $idLastTask = null, $nameLastTask = null, $durationLastTask = null, $dateLastTask = null)
     {
-        // Récupération du type d'utilisateur
-        $user = $this->userManager->GetByLoginId($_SESSION['IdLogin']);
-        $userType = $user->getUserType();
+        $user = $this->userManager->GetByLoginId(intval($_SESSION['IdLogin']));
 
-        // Utilisation du service pour les tâches
-        $tasksData = $this->taskService->getMergedTasks(
-            $userType,
-            intval($_SESSION['IdLogin'])
+        $tasksData = $this->taskService->getMergedTasksForHome(
+            $this->userManager->GetIdMyHomeByIdUser($this->userManager->GetIdUserByLoginId($_SESSION['IdLogin']) ),
+            $user->getUserType()
         );
 
         // Calcul des données spécifiques
