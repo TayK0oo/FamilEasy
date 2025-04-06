@@ -58,30 +58,6 @@ class LoginManager extends Model
     }
 
     /**
-     * Get a login by its ID
-     * @param int $id
-     * @return Login|null
-     * @author Théo Cornu
-     */
-    public function getByID(int $id): ?Login {
-        $sql = 'SELECT * FROM login WHERE idLogin = ?';
-        $resultat = $this->executerRequete($sql, [$id]);
-
-        $ligne = $resultat->fetch();
-        if ($ligne !== false) {
-            $login = new Login(
-                $ligne['id'],
-                $ligne['username'],
-                $ligne['hash']
-            );
-
-            return $login;
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * Delete a login by its ID
      * @param int $id
      * @return void

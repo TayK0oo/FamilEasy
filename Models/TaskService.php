@@ -2,6 +2,7 @@
 
 namespace Models;
 
+use User;
 use UserManager;
 
 class TaskService
@@ -134,7 +135,7 @@ class TaskService
         }
     }
 
-    public function getMergedTasks(string $userType, int $userId): array
+    public function getMergedPersonTasks(string $userType, int $userId): array
     {
         try {
             // 1. Charger le fichier de base
@@ -186,8 +187,9 @@ class TaskService
    /**
      * Récupère toutes les tâches personnalisées d'un foyer
      */
-    public function getMergedTasksForHome(int $myHomeId, string $userType): array
+    public function getMergedTasksForHome(int $myHomeId, User $user): array
     {
+        $userType = $user->getUserType();
         error_log("getMergedTasksForHome: Starting to merge tasks for home ID $myHomeId and user type $userType.");
         try {
             // 1. Charger le fichier de base

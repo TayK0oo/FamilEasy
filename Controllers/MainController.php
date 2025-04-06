@@ -40,11 +40,24 @@ class MainController
     public function Reference(): void
     {
         $user = $this->userManager->GetByLoginId(intval($_SESSION['IdLogin']));
+        $myHomeId = $this->userManager->GetIdMyHomeByIdUser($this->userManager->GetIdUserByLoginId($_SESSION['IdLogin']));
+        $userId = $this->userManager->GetIdUserByLoginId($_SESSION['IdLogin']);
 
-        $tasks = $this->taskService->getMergedTasksForHome(
-            $this->userManager->GetIdMyHomeByIdUser($this->userManager->GetIdUserByLoginId($_SESSION['IdLogin']) ),
-            $user->getUserType()
-        );
+        // Utilisation du TaskService pour les tâches du foyer
+        $userType = $this->userManager->GetByLoginID($_SESSION['IdLogin']);
+        if ($myHomeId != null) {
+            $tasks = $this->taskService->getMergedTasksForHome(
+                $myHomeId,
+                $userType
+            );
+        }
+        else
+        {
+            $tasks =  $this->taskService->getMergedPersonTasks(
+                $userType,
+                $userId
+            );
+        }
 
         $this->displayView("Reference", ['tasks' => $tasks]);
     }
@@ -198,12 +211,24 @@ class MainController
      */
     public function DashBoard($message = null, $idLastTask = null, $nameLastTask = null, $durationLastTask = null, $dateLastTask = null)
     {
-        $user = $this->userManager->GetByLoginId(intval($_SESSION['IdLogin']));
+        $myHomeId = $this->userManager->GetIdMyHomeByIdUser($this->userManager->GetIdUserByLoginId($_SESSION['IdLogin']));
+        $userId = $this->userManager->GetIdUserByLoginId($_SESSION['IdLogin']);
 
-        $tasksData = $this->taskService->getMergedTasksForHome(
-            $this->userManager->GetIdMyHomeByIdUser($this->userManager->GetIdUserByLoginId($_SESSION['IdLogin']) ),
-            $user->getUserType()
-        );
+        // Utilisation du TaskService pour les tâches du foyer
+        $userType = $this->userManager->GetByLoginID($_SESSION['IdLogin']);
+        if ($myHomeId != null) {
+            $tasksData = $this->taskService->getMergedTasksForHome(
+                $myHomeId,
+                $userType
+            );
+        }
+        else
+        {
+            $tasksData =  $this->taskService->getMergedPersonTasks(
+                $userType,
+                $userId
+            );
+        }
 
         // Calcul des données spécifiques
         $taskData = $this->calculateTaskDataD();
