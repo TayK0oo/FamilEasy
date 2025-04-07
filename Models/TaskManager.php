@@ -268,16 +268,30 @@ class TaskManager extends Model
     {
         try {
             if ($Task->getDuration() != null) {
-                $sql = 'SELECT COUNT(*) FROM task WHERE name = ? AND Date = ? AND Duration = ? AND idTask != ?';
-                $result = $this->executerRequete($sql, [$Task->getNameTask(), $Task->getDateAdded(), $Task->getDuration(), $Task->getId()]);
+                $sql = 'SELECT COUNT(*) FROM task 
+        WHERE name = ? 
+        AND Date = ? 
+        AND Duration = ? 
+        AND idTask != ? 
+        AND DashBoardidDashBoard = ?'; // ✅ Correction
+                $result = $this->executerRequete($sql, [
+                    $Task->getNameTask(),
+                    $Task->getDateAdded(),
+                    $Task->getDuration(),
+                    $Task->getId(),
+                    $Task->getIdDashBoard() // ✅ 5ème paramètre
+                ]);
                 $line = $result->fetch(PDO::FETCH_NUM);
                 return $line[0] > 0;
             } else {
                 return false;
             }
-        } catch (PDOException $e) {
-            // In case of an error, redirect to the error page with a message
-            $errorMessage = "The Task already exists.";
+        }catch (PDOException $e) {
+            // Loggez l'erreur réelle pour le débogage
+            error_log("Erreur DB: " . $e->getMessage());
+
+            // Message plus explicite
+            $errorMessage = "Erreur de vérification de tâche : " . $e->getMessage();
             header("Location: index.php?action=DashBoard&errorMessage=".urlencode($errorMessage));
             exit();
         }

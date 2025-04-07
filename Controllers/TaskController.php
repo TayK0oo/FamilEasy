@@ -87,7 +87,7 @@ class TaskController
     * Create a new Task.
     * @author Théo
     */
-   private function createTask()
+   private function createTask(): void
    {
       // Create a new Task
       $this->populateTask();

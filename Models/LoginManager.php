@@ -142,6 +142,7 @@ class LoginManager extends Model
      */
     public function Disconnect() : void {
         session_destroy();
+        unset($_SESSION['tasks']);
         header("Location: ".$_SERVER['PHP_SELF']);
     }
 
